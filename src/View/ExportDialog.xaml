@@ -1,0 +1,43 @@
+﻿<ui:ContentDialog x:Class="Achievement.Exporter.Plugin.ExportDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:ui="http://schemas.modernwpf.com/2019"
+                  xmlns:wu="clr-namespace:WPFUI.Controls;assembly=WPFUI"
+                  xmlns:local="clr-namespace:Achievement.Exporter.Plugin"
+                  mc:Ignorable="d"
+                  d:DesignHeight="600" d:DesignWidth="800"
+                  IsPrimaryButtonEnabled="False"
+                  Title="导出结果"
+                  DefaultButton="Close"
+                  CloseButtonText="关闭">
+    <ui:ContentDialog.Resources>
+        <local:NavigateUriAddtionConverter x:Key="NavigateUriAddtionConverter"/>
+    </ui:ContentDialog.Resources>
+    <StackPanel MaxWidth="400">
+        <TextBlock Margin="0,8,0,5" Text="选择导出网页" Style="{StaticResource BaseTextBlockStyle}"/>
+        <ComboBox x:Name="comboBoxSelectExport" Margin="0,0,0,0" SelectedIndex="0">
+            <ComboBoxItem Content="{x:Static local:ExportDialog.Export1}"/>
+            <ComboBoxItem Content="{x:Static local:ExportDialog.Export2}"/>
+            <ComboBoxItem Content="{x:Static local:ExportDialog.Export3}"/>
+        </ComboBox>
+        <TextBlock Margin="0,8,0,0" Text="使用方法" VerticalAlignment="Center" Style="{StaticResource BaseTextBlockStyle}"/>
+        <ui:HyperlinkButton Content="1. 进入导出网页" NavigateUri="{Binding Text,ElementName=comboBoxSelectExport,Converter={StaticResource NavigateUriAddtionConverter}}"/>
+        <TextBlock Text="2. 按 F12 打开 开发者工具" Style="{StaticResource BodyTextBlockStyle}"/>
+        <TextBlock Text="3. 将开发者工具切换至 控制台(Console) 页签" Margin="0,2,0,0" Style="{StaticResource BodyTextBlockStyle}"/>
+        <TextBlock Text="4. 复制下方的代码，并将其粘贴在控制台中，按下回车" Margin="0,2,0,0" Style="{StaticResource BodyTextBlockStyle}"/>
+        <Border Background="{StaticResource SystemControlBackgroundChromeMediumLowBrush}" Padding="12" Margin="0,8,0,0" CornerRadius="{StaticResource CompatCornerRadius}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                       Text="{Binding JsCode}"/>
+                <Button Content="&#xE8C8;" Margin="12,0,0,0" Grid.Column="1" VerticalAlignment="Top"
+                                    FontFamily="{StaticResource SymbolThemeFontFamily}" ToolTipService.ToolTip="复制到剪贴板" Click="CopyCodeButtonClick"/>
+            </Grid>
+        </Border>
+    </StackPanel>
+</ui:ContentDialog>

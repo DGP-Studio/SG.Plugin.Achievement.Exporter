@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows10.0.18362</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<LangVersion>10.0</LangVersion>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>embedded</DebugType>
+    <UseWPF>true</UseWPF>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <Platforms>AnyCPU;x64</Platforms>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Version>1.0.0.2</Version>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1998;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1998;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NoWarn>1701;1702;1998;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NoWarn>1701;1702;1998;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <None Remove="Resources\Achievement.json" />
+    <None Remove="Resources\UI_BagTabIcon_Equip.png" />
+    <None Remove="Resources\UI_BtnIcon_RelicType1.png" />
+    <None Remove="Resources\UI_BtnIcon_RelicType2.png" />
+    <None Remove="Resources\UI_BtnIcon_RelicType3.png" />
+    <None Remove="Resources\UI_BtnIcon_RelicType4.png" />
+    <None Remove="Resources\UI_BtnIcon_RelicType5.png" />
+    <None Remove="Resources\UI_Icon_Achievement.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DGP.Genshin\DGP.Genshin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Achievement.json" />
+    <Resource Include="Resources\UI_Icon_Achievement.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\ExportDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="View\PreviewCaptureAreaDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)Build\Debug\net6.0-windows10.0.18362.0\Plugins&quot; /y" />
+  </Target>
+
+</Project>
