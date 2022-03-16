@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Achievement.Exporter.Plugin
 {
+    /// <summary>
+    /// 图像识别
+    /// </summary>
     public class ImageRecognition
     {
         /// <summary>

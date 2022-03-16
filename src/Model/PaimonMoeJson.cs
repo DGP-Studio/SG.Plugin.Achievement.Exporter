@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Snap.Data.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ namespace Achievement.Exporter.Plugin
 
             PaimonMoeJson paimonMoe = new();
             string achievementJson = Encoding.UTF8.GetString(GetBytes("pack://application:,,,/Achievement.Exporter.Plugin;component/Resources/Achievement.json"));
-            paimonMoe.All = JsonConvert.DeserializeObject<Dictionary<string, List<ExistAchievement>>>(achievementJson)!;
+            paimonMoe.All = Json.ToObjectOrNew<Dictionary<string, List<ExistAchievement>>>(achievementJson);
             return paimonMoe;
         }
 
@@ -56,7 +56,7 @@ namespace Achievement.Exporter.Plugin
                     ocrAchievement.Match = maxMatch;
                     maxMatch.ocrAchievement = ocrAchievement;
                     // 成就集合要再次匹配描述，并把下级成就给完成
-                    if (maxMatch.levels != null && maxMatch.levels.Count > 1)
+                    if (maxMatch.levels?.Count > 1)
                     {
                         MatchingMutilLevels(ocrAchievement, maxMatch, dic);
                     }

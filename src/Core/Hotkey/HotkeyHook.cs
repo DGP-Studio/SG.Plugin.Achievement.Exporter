@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Core.Hotkey
 {
     /// <summary>
     /// Code from:
@@ -10,13 +10,13 @@ namespace Achievement.Exporter.Plugin
     /// </summary>
     public sealed class HotkeyHook : IDisposable
     {
-        private class Window : NativeWindow, IDisposable
+        private class DummyWindow : NativeWindow, IDisposable
         {
             private static readonly int WM_HOTKEY = 0x0312;
 
             public event EventHandler<KeyPressedEventArgs>? KeyPressed;
 
-            public Window()
+            public DummyWindow()
             {
                 CreateHandle(new CreateParams());
             }
@@ -27,7 +27,7 @@ namespace Achievement.Exporter.Plugin
 
                 if (m.Msg == WM_HOTKEY)
                 {
-                    Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
+                    Keys key = (Keys)((int)m.LParam >> 16 & 0xFFFF);
                     ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
                     KeyPressed?.Invoke(this, new KeyPressedEventArgs(modifier, key));
@@ -40,7 +40,7 @@ namespace Achievement.Exporter.Plugin
             }
         }
 
-        private Window window;
+        private DummyWindow window;
         private int currentId;
 
         public HotkeyHook()
@@ -49,7 +49,7 @@ namespace Achievement.Exporter.Plugin
             window.KeyPressed += (_, e) => KeyPressed?.Invoke(this, e);
         }
 
-        public void RegisterHotKey(ModifierKeys modifier, Keys key)
+        public void Register(ModifierKeys modifier, Keys key)
         {
             currentId += 1;
             if (!NativeMethod.RegisterHotKey(window.Handle, currentId, (uint)modifier, (uint)key))
@@ -61,7 +61,7 @@ namespace Achievement.Exporter.Plugin
             }
         }
 
-        public void UnregisterHotKey()
+        public void Unregister()
         {
             for (int i = currentId; i > 0; i--)
             {
@@ -73,30 +73,8 @@ namespace Achievement.Exporter.Plugin
 
         public void Dispose()
         {
-            UnregisterHotKey();
+            Unregister();
             window?.Dispose();
         }
-    }
-
-    public class KeyPressedEventArgs : EventArgs
-    {
-        public ModifierKeys Modifier { get; }
-
-        public Keys Key { get; }
-
-        internal KeyPressedEventArgs(ModifierKeys modifier, Keys key)
-        {
-            Modifier = modifier;
-            Key = key;
-        }
-    }
-
-    [Flags]
-    public enum ModifierKeys : uint
-    {
-        Alt = 1,
-        Control = 2,
-        Shift = 4,
-        Win = 8
     }
 }

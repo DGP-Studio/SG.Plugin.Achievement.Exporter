@@ -1,4 +1,4 @@
-﻿<Page x:Class="Achievement.Exporter.Plugin.AchievementExporterPage"
+﻿<Page x:Class="Achievement.Exporter.Plugin.Achievement.Exporter.Plugin.Helper.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.AchievementExporterPage" x:ClassModifier="internal"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,15 +6,13 @@
       xmlns:wu="clr-namespace:WPFUI.Controls;assembly=WPFUI"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:local="clr-namespace:Achievement.Exporter.Plugin"
-      xmlns:converter="clr-namespace:DGP.Genshin.Control.Converter;assembly=DGP.Genshin"
       xmlns:smoothscrollviewer="clr-namespace:DGP.Genshin.Control.Infrastructure.SmoothScrollViewer;assembly=DGP.Genshin"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="895"
       Title="AchievementExporter" FocusVisualStyle="{x:Null}" Focusable="True">
     <Page.Resources>
-        <converter:BooleanToVisibilityRevertConverter x:Key="BooleanToVisibilityRevertConverter"/>
-        <local:BooleanToStringSelectorConverter x:Key="BooleanToStringSelectorConverter"/>
-        <local:BooleanToBrushSelectorConverter x:Key="BooleanToBrushSelectorConverter"/>
+        <local:Achievement.Exporter.Plugin.Core.BooleanToStringSelectorConverter x:Key="BooleanToStringSelectorConverter"/>
+        <local:Achievement.Exporter.Plugin.Core.BooleanToBrushSelectorConverter x:Key="BooleanToBrushSelectorConverter"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>

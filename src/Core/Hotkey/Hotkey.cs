@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Snap.Data.Utility;
+using System;
+using System.Text;
 using System.Windows.Forms;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Core.Hotkey
 {
+    /// <summary>
+    /// 表示当前设置的热键
+    /// </summary>
     public class Hotkey
     {
         public bool Alt { get; set; }
-
         public bool Control { get; set; }
-
         public bool Shift { get; set; }
-
         public bool Windows { get; set; }
 
         private Keys key;
@@ -31,10 +33,10 @@ namespace Achievement.Exporter.Plugin
         }
 
         public ModifierKeys ModifierKey =>
-            (Windows ? ModifierKeys.Win : 0) |
-            (Control ? ModifierKeys.Control : 0) |
-            (Shift ? ModifierKeys.Shift : 0) |
-            (Alt ? ModifierKeys.Alt : 0);
+            (Windows ? ModifierKeys.Win : ModifierKeys.None) |
+            (Control ? ModifierKeys.Control : ModifierKeys.None) |
+            (Shift ? ModifierKeys.Shift : ModifierKeys.None) |
+            (Alt ? ModifierKeys.Alt : ModifierKeys.None);
 
         public Hotkey()
         {
@@ -48,7 +50,7 @@ namespace Achievement.Exporter.Plugin
                 string[] keyStrs = hotkeyStr.Replace(" ", "").Split('+');
                 foreach (string keyStr in keyStrs)
                 {
-                    string k = keyStr.ToLower();
+                    string k = keyStr.ToLowerInvariant();
                     if (k == "win")
                         Windows = true;
                     else if (k == "ctrl")
@@ -70,16 +72,17 @@ namespace Achievement.Exporter.Plugin
         public override string ToString()
         {
             string str = string.Empty;
+            StringBuilder stringBuilder = new();
             if (Key != Keys.None)
             {
-                str = string.Format("{0}{1}{2}{3}{4}",
-                    Windows ? "Win + " : string.Empty,
-                    Control ? "Ctrl + " : string.Empty,
-                    Shift ? "Shift + " : string.Empty,
-                    Alt ? "Alt + " : string.Empty,
-                    Key);
+                stringBuilder
+                    .AppendIf(Windows, "win + ")
+                    .AppendIf(Control, "ctrl + ")
+                    .AppendIf(Shift, "shift + ")
+                    .AppendIf(Alt, "alt + ")
+                    .Append(Key);
             }
-            return str;
+            return stringBuilder.ToString();
         }
 
         public void Reset()

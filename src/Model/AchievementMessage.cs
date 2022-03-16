@@ -15,23 +15,9 @@
             Message = message;
         }
 
-        public override string ToString() => $"[{Level}]|{Message}";
-    }
-
-    internal enum AchievementMessageLevel
-    {
-        Debug,
-        Info,
-        Warn,
-        Error,
-        Fatal,
-    }
-
-    internal enum AchievementProcessing
-    {
-        None,
-        PageToSection,
-        Ocr,
-        Matching,
+        public override string ToString()
+        {
+            return $"[{Level}]|{Message}";
+        }
     }
 }

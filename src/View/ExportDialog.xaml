@@ -1,4 +1,4 @@
-﻿<ui:ContentDialog x:Class="Achievement.Exporter.Plugin.ExportDialog"
+﻿<ui:ContentDialog x:Class="Achievement.Exporter.Plugin.Achievement.Exporter.Plugin.Helper.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Hotkey.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.Core.Achievement.Exporter.Plugin.ViewModel.Achievement.Exporter.Plugin.Helper.ExportDialog"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,14 +13,14 @@
                   DefaultButton="Close"
                   CloseButtonText="关闭">
     <ui:ContentDialog.Resources>
-        <local:NavigateUriAddtionConverter x:Key="NavigateUriAddtionConverter"/>
+        <local:Achievement.Exporter.Plugin.Helper.NavigateUriAddtionConverter x:Key="NavigateUriAddtionConverter"/>
     </ui:ContentDialog.Resources>
     <StackPanel MaxWidth="400">
         <TextBlock Margin="0,8,0,5" Text="选择导出网页" Style="{StaticResource BaseTextBlockStyle}"/>
         <ComboBox x:Name="comboBoxSelectExport" Margin="0,0,0,0" SelectedIndex="0">
-            <ComboBoxItem Content="{x:Static local:ExportDialog.Export1}"/>
-            <ComboBoxItem Content="{x:Static local:ExportDialog.Export2}"/>
-            <ComboBoxItem Content="{x:Static local:ExportDialog.Export3}"/>
+            <ComboBoxItem Content="{x:Static local:Achievement.Exporter.Plugin.Helper.ExportDialog.Export1}"/>
+            <ComboBoxItem Content="{x:Static local:Achievement.Exporter.Plugin.Helper.ExportDialog.Export2}"/>
+            <ComboBoxItem Content="{x:Static local:Achievement.Exporter.Plugin.Helper.ExportDialog.Export3}"/>
         </ComboBox>
         <TextBlock Margin="0,8,0,0" Text="使用方法" VerticalAlignment="Center" Style="{StaticResource BaseTextBlockStyle}"/>
         <ui:HyperlinkButton Content="1. 进入导出网页" NavigateUri="{Binding Text,ElementName=comboBoxSelectExport,Converter={StaticResource NavigateUriAddtionConverter}}"/>

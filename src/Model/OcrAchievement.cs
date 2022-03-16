@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Achievement.Exporter.Plugin.Helper;
+using Snap.Data.Primitive;
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -7,7 +9,7 @@ using Windows.Media.Ocr;
 namespace Achievement.Exporter.Plugin
 {
     [Serializable]
-    public class OcrAchievement
+    public class OcrAchievement : ICloneable<OcrAchievement>
     {
         public int Index { get; set; }
         public Bitmap? Image { get; set; }
@@ -68,11 +70,11 @@ namespace Achievement.Exporter.Plugin
             double horizontalY = Image!.Height * 1.0 / 2;
             double margin = horizontalY / 4; // 用于边缘容错
             double verticalX = Image.Width * 1.0 / 2;
-            OcrResult ocrResult = await OcrUtils.RecognizeAsync(ImagePath!, engine);
+            OcrResult ocrResult = await OcrHelper.RecognizeAsync(ImagePath!, engine);
             foreach (var line in ocrResult.Lines)
             {
                 Rect firstRect = line.Words[0].BoundingRect;
-                string lineStr = OcrUtils.LineString(line);
+                string lineStr = line.Concat();
                 OcrText += lineStr + Environment.NewLine;
                 if (firstRect.Left < verticalX && firstRect.Bottom <= horizontalY + margin)
                 {
@@ -98,7 +100,7 @@ namespace Achievement.Exporter.Plugin
             // 严格识别不到，就默认第一行
             if (string.IsNullOrEmpty(OcrAchievementName) && ocrResult.Lines.Count > 0)
             {
-                OcrAchievementName = OcrUtils.LineString(ocrResult.Lines[0]);
+                OcrAchievementName = ocrResult.Lines[0].Concat();
             }
             return OcrText!;
         }

@@ -1,16 +1,19 @@
-﻿using ModernWpf.Controls;
+﻿using Achievement.Exporter.Plugin.Core.Hotkey;
+using Achievement.Exporter.Plugin.Helper;
+using DGP.Genshin;
+using DGP.Genshin.Helper;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using Windows.Media.Ocr;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Core
 {
-    internal class AchievementCtrl
+    internal class AchievementManager
     {
         public const int CaptureInterval = 20;
         public const string HotkeyStop = "F11";
@@ -23,7 +26,7 @@ namespace Achievement.Exporter.Plugin
         private static string imgPagePath = null!;
         private static string imgSectionPath = null!;
 
-        private readonly ImageCapture capture = new();
+        private readonly ImageCapturing capture = new();
         private readonly GenshinWindow window = new();
 
         private int x, y, w, h;
@@ -76,18 +79,18 @@ namespace Achievement.Exporter.Plugin
             }
         }
 
-        static AchievementCtrl()
+        static AchievementManager()
         {
-            userDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AchievementData");
+            userDataPath = Path.Combine(AppContext.BaseDirectory, "AchievementData");
             imgPagePath = Path.Combine(userDataPath, "pages");
             imgSectionPath = Path.Combine(userDataPath, "sections");
         }
 
-        public AchievementCtrl()
+        public AchievementManager()
         {
         }
 
-        public void Setup()
+        public void Initialize()
         {
             try
             {
@@ -135,7 +138,7 @@ namespace Achievement.Exporter.Plugin
                 w = rect.Width + 2;
                 h = rect.Height;
 
-                Application.Current.MainWindow.Focus();
+                App.Current.MainWindow.Focus();
                 ContentDialogResult result = await new PreviewCaptureAreaDialog(capture.Capture(x, y, w, h).ToBitmapImage()).ShowAsync();
                 if (result is not ContentDialogResult.Primary)
                 {
@@ -149,9 +152,9 @@ namespace Achievement.Exporter.Plugin
                 await Task.Delay(500);
                 window.Click(x, y, h);
 
-                IOUtils.CreateFolder(userDataPath);
-                IOUtils.CreateFolder(imgPagePath);
-                IOUtils.DeleteFolder(imgPagePath);
+                PathContext.CreateFolderOrIgnore(userDataPath);
+                PathContext.CreateFolderOrIgnore(imgPagePath);
+                PathContext.DeleteFolderOrIgnore(imgPagePath);
 
                 paimonMoeJson = PaimonMoeJson.Builder();
 
@@ -240,8 +243,8 @@ namespace Achievement.Exporter.Plugin
         /// </summary>
         private void PageToSection()
         {
-            IOUtils.CreateFolder(imgSectionPath);
-            IOUtils.DeleteFolder(imgSectionPath);
+            PathContext.CreateFolderOrIgnore(imgSectionPath);
+            PathContext.DeleteFolderOrIgnore(imgSectionPath);
 
             DirectoryInfo dir = new(imgPagePath);
             FileInfo[] fileInfo = dir.GetFiles();
@@ -251,7 +254,7 @@ namespace Achievement.Exporter.Plugin
             Progress = 0d;
             foreach (FileInfo item in fileInfo)
             {
-                Bitmap imgPage = ImageUtils.FromFile(item.FullName);
+                Bitmap imgPage = BitmapExtensions.FromFile(item.FullName);
                 List<Bitmap> list = ImageRecognition.Split(imgPage);
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -272,7 +275,7 @@ namespace Achievement.Exporter.Plugin
             foreach (FileInfo item in fileInfo)
             {
                 OcrAchievement achievement = new();
-                achievement.Image = ImageUtils.FromFile(item.FullName);
+                achievement.Image = BitmapExtensions.FromFile(item.FullName);
                 achievement.ImagePath = item.FullName;
                 list.Add(achievement);
             }
@@ -313,8 +316,8 @@ namespace Achievement.Exporter.Plugin
             MessageCatched?.Invoke(this, new(level ?? AchievementMessageLevel.Info, msg));
         }
 
-        #region [HotKey]
-        private static Hotkey hotkey = null!;
+        #region HotKey
+        private static Hotkey.Hotkey hotkey = null!;
         private static HotkeyHook hotkeyHook = null!;
 
         public void RegisterHotKey(string hotkeyStr)
@@ -325,19 +328,19 @@ namespace Achievement.Exporter.Plugin
                 return;
             }
 
-            hotkey = new Hotkey(hotkeyStr);
+            hotkey = new (hotkeyStr);
 
             hotkeyHook?.Dispose();
             hotkeyHook = new HotkeyHook();
             hotkeyHook.KeyPressed += (_, _) => stopFlag = true;
-            hotkeyHook.RegisterHotKey(hotkey.ModifierKey, hotkey.Key);
+            hotkeyHook.Register(hotkey.ModifierKey, hotkey.Key);
         }
 
         public void UnregisterHotKey()
         {
             if (hotkeyHook != null)
             {
-                hotkeyHook.UnregisterHotKey();
+                hotkeyHook.Unregister();
                 hotkeyHook.Dispose();
             }
         }

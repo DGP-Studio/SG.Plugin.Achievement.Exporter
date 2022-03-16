@@ -1,20 +1,21 @@
-﻿using System;
+﻿using Snap.Win32;
+using Snap.Win32.NativeMethod;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Core
 {
+    /// <summary>
+    /// 表示原神窗口的抽象
+    /// 定义对原神窗口的抽象操作
+    /// </summary>
     public class GenshinWindow
     {
-        public static int WM_MOUSEWHEEL = 0x020A; // 滚轮滑动
-        public static int WM_MOUSEMOVE = 0x200; // 鼠标移动
-        public static int WM_LBUTTONDOWN = 0x201; //按下鼠标左键
-        public static int WM_LBUTTONUP = 0x202; //释放鼠标左键
-
-        public IntPtr HWND { get; set; }
+        private IntPtr HWND { get; set; }
 
         public GenshinWindow()
         {
@@ -28,7 +29,7 @@ namespace Achievement.Exporter.Plugin
 
         internal static IntPtr MAKELPARAM(int low, int high)
         {
-            return (IntPtr)((high << 16) | (low & 0xFFFF));
+            return (IntPtr)(high << 16 | low & 0xFFFF);
         }
 
         public bool FindWindowHandle()
@@ -58,32 +59,34 @@ namespace Achievement.Exporter.Plugin
         {
             const int WM_SYSCOMMAND = 0x0112;
             const int SC_RESTORE = 0xF120;
-            NativeMethod.SendMessage(HWND, WM_SYSCOMMAND, SC_RESTORE, 0);
-            NativeMethod.SetForegroundWindow(HWND);
-            while (NativeMethod.IsIconic(HWND))
+            _ = User32.SendMessage(HWND, WM_SYSCOMMAND, SC_RESTORE, 0);
+            _ = User32.SetForegroundWindow(HWND);
+            while (User32.IsIconic(HWND))
+            {
                 continue;
+            }
         }
 
         public Rectangle GetSize()
         {
-            NativeMethod.RECT rc = new();
-            NativeMethod.GetWindowRect(HWND, ref rc);
+            RECT rc = new();
+            User32.GetWindowRect(HWND, ref rc);
             return new Rectangle(rc.Left, rc.Top, rc.Right - rc.Left, rc.Bottom - rc.Top);
         }
 
         public void MouseWheelUp()
         {
-            NativeMethod.MouseEvent(NativeMethod.MouseEventFlag.Wheel, 0, 0, 120, 0);
+            _ = User32.MouseEvent(User32.MouseEventFlag.Wheel, 0, 0, 120, 0);
         }
 
         public void MouseWheelDown()
         {
-            NativeMethod.MouseEvent(NativeMethod.MouseEventFlag.Wheel, 0, 0, -120, 0);
+            _ = User32.MouseEvent(User32.MouseEventFlag.Wheel, 0, 0, -120, 0);
         }
 
         public void MouseMove(int x, int y)
         {
-            NativeMethod.MouseEvent(NativeMethod.MouseEventFlag.Absolute | NativeMethod.MouseEventFlag.Move, 
+            _ = User32.MouseEvent(User32.MouseEventFlag.Absolute | User32.MouseEventFlag.Move,
                 x * 65536 / PrimaryScreen.DESKTOP.Width, y * 65536 / PrimaryScreen.DESKTOP.Height,
                 0, 0);
         }
@@ -95,20 +98,20 @@ namespace Achievement.Exporter.Plugin
 
         public void MouseLeftDown()
         {
-            NativeMethod.MouseEvent(NativeMethod.MouseEventFlag.LeftDown, 0, 0, 0, 0);
+            _ = User32.MouseEvent(User32.MouseEventFlag.LeftDown, 0, 0, 0, 0);
         }
 
         public void MouseLeftUp()
         {
-            NativeMethod.MouseEvent(NativeMethod.MouseEventFlag.LeftUp, 0, 0, 0, 0);
+            _ = User32.MouseEvent(User32.MouseEventFlag.LeftUp, 0, 0, 0, 0);
         }
 
         public void MouseClick(int x, int y)
         {
-            int p = (y << 16) | x;
-            NativeMethod.PostMessage(HWND, WM_LBUTTONDOWN, 0, p);
+            int p = y << 16 | x;
+            User32.PostMessage(HWND, User32.WM_LBUTTONDOWN, 0, p);
             Thread.Sleep(100);
-            NativeMethod.PostMessage(HWND, WM_LBUTTONUP, 0, p);
+            User32.PostMessage(HWND, User32.WM_LBUTTONUP, 0, p);
         }
 
         public void Click(int x, int y, int h)

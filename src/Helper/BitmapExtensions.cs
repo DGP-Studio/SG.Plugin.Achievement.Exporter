@@ -3,9 +3,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Helper
 {
-    internal static class ImageUtils
+    internal static class BitmapExtensions
     {
         public static Bitmap FromFile(string path)
         {

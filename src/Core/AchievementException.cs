@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Core
 {
     internal class AchievementException : Exception
     {

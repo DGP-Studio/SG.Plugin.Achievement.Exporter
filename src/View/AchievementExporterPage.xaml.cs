@@ -1,5 +1,8 @@
-﻿using ModernWpf.Controls;
+﻿using Achievement.Exporter.Plugin.Core;
+using Achievement.Exporter.Plugin.ViewModel;
+using ModernWpf.Controls;
 using Snap.Core.DependencyInjection;
+using Snap.Core.Logging;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -7,43 +10,44 @@ using System.Windows.Forms;
 namespace Achievement.Exporter.Plugin
 {
     [View(InjectAs.Transient)]
-    public partial class AchievementExporterPage : System.Windows.Controls.Page
+    internal partial class AchievementExporterPage : System.Windows.Controls.Page
     {
-        internal AchievementExporterViewModel ViewModel => (DataContext as AchievementExporterViewModel)!;
-        internal AchievementCtrl Ctrl;
+        private readonly AchievementExporterViewModel viewModel;
+        internal AchievementManager manager;
 
-        public AchievementExporterPage()
+        public AchievementExporterPage(AchievementExporterViewModel vm)
         {
-            DataContext = new AchievementExporterViewModel();
-            Ctrl = new();
+            DataContext = vm;
+            viewModel = vm;
+            manager = new();
             InitializeComponent();
 
             Loaded += (s, e) =>
             {
-                Ctrl.Setup();
+                manager.Initialize();
             };
 
             buttonStart.Click += (s, e) =>
             {
                 SetIsEnabled(false);
                 logs.Clear();
-                _ = Ctrl.StartAsync();
+                _ = manager.StartAsync();
             };
 
-            buttonExport.Click += async (s, e) =>
-            {
-                ContentDialogResult result = await new ExportDialog(Ctrl.paimonMoeJson).ShowAsync();
+            //buttonExport.Click += async (s, e) =>
+            //{
+            //    ContentDialogResult result = await new ExportDialog(manager.paimonMoeJson).ShowAsync();
 
-                if (result is not ContentDialogResult.Primary)
-                {
-                }
-            };
+            //    if (result is not ContentDialogResult.Primary)
+            //    {
+            //    }
+            //};
 
-            Ctrl.ProgressUpdated += (s, e) =>
+            manager.ProgressUpdated += (s, e) =>
             {
                 (AchievementProcessing processing, double value, double min, double max) = e;
 
-                Trace.WriteLine($"[{processing}] {value}/{max} {value / max * 100d:0}%");
+                this.Log($"[{processing}] {value}/{max} {value / max * 100d:0}%");
 
                 if (processing == AchievementProcessing.None)
                 {
@@ -53,14 +57,14 @@ namespace Achievement.Exporter.Plugin
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        ViewModel.Progress = value;
-                        ViewModel.ProgressMin = min;
-                        ViewModel.ProgressMax = max;
+                        viewModel.Progress = value;
+                        viewModel.ProgressMin = min;
+                        viewModel.ProgressMax = max;
                     });
                 }
             };
 
-            Ctrl.ExceptionCatched += (s, e) =>
+            manager.ExceptionCatched += (s, e) =>
             {
                 Dispatcher.Invoke(() =>
                 {
@@ -70,7 +74,7 @@ namespace Achievement.Exporter.Plugin
                 });
             };
 
-            Ctrl.MessageCatched += (s, e) =>
+            manager.MessageCatched += (s, e) =>
             {
                 Dispatcher.Invoke(() =>
                 {

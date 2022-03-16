@@ -39,10 +39,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
     <None Remove="Resources\Achievement.json" />
     <None Remove="Resources\UI_BagTabIcon_Equip.png" />
     <None Remove="Resources\UI_BtnIcon_RelicType1.png" />

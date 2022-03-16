@@ -14,57 +14,13 @@ namespace Achievement.Exporter.Plugin
         [DllImport("user32.dll", EntryPoint = "ReleaseDC")]
         private static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDc);
         #endregion
+
         #region DeviceCaps常量
         const int HORZRES = 8;
         const int VERTRES = 10;
-        const int LOGPIXELSX = 88;
-        const int LOGPIXELSY = 90;
         const int DESKTOPVERTRES = 117;
         const int DESKTOPHORZRES = 118;
         #endregion
-
-        /// <summary>
-        /// 获取屏幕分辨率当前物理大小
-        /// </summary>
-        public static Size WorkingArea
-        {
-            get
-            {
-                IntPtr hdc = GetDC(IntPtr.Zero);
-                Size size = new();
-                size.Width = GetDeviceCaps(hdc, HORZRES);
-                size.Height = GetDeviceCaps(hdc, VERTRES);
-                ReleaseDC(IntPtr.Zero, hdc);
-                return size;
-            }
-        }
-
-        /// <summary>
-        /// 当前系统DPI_X 大小 一般为96
-        /// </summary>
-        public static int DpiX
-        {
-            get
-            {
-                IntPtr hdc = GetDC(IntPtr.Zero);
-                int DpiX = GetDeviceCaps(hdc, LOGPIXELSX);
-                ReleaseDC(IntPtr.Zero, hdc);
-                return DpiX;
-            }
-        }
-        /// <summary>
-        /// 当前系统DPI_Y 大小 一般为96
-        /// </summary>
-        public static int DpiY
-        {
-            get
-            {
-                IntPtr hdc = GetDC(IntPtr.Zero);
-                int DpiX = GetDeviceCaps(hdc, LOGPIXELSY);
-                ReleaseDC(IntPtr.Zero, hdc);
-                return DpiX;
-            }
-        }
         /// <summary>
         /// 获取真实设置的桌面分辨率大小
         /// </summary>
@@ -108,13 +64,6 @@ namespace Achievement.Exporter.Plugin
                 ReleaseDC(IntPtr.Zero, hdc);
                 return ScaleY;
             }
-        }
-        public static Rectangle Transform(Rectangle rect)
-        {
-            return new Rectangle((int)Math.Ceiling(rect.X * ScaleX),
-                (int)Math.Ceiling(rect.Y * ScaleY),
-                (int)Math.Ceiling(rect.Width * ScaleX),
-                (int)Math.Ceiling(rect.Height * ScaleY));
         }
     }
 }
