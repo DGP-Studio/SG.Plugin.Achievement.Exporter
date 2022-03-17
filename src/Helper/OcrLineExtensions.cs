@@ -3,7 +3,7 @@ using Windows.Media.Ocr;
 
 namespace Achievement.Exporter.Plugin.Helper
 {
-    internal static class OcrLineExtensions 
+    internal static class OcrLineExtensions
     {
         public static string Concat(this OcrLine line)
         {

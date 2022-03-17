@@ -37,7 +37,11 @@ namespace Achievement.Exporter.Plugin.ViewModel
             get => progressMax;
             set => SetProperty(ref progressMax, value, nameof(ProgressMax));
         }
-        public bool IsRunAsAdmin => App.IsElevated;
+        public bool IsRunAsAdmin
+        {
+            get => App.IsElevated;
+        }
+
         public bool WindowHandleFound
         {
             get => windowHandleFound;

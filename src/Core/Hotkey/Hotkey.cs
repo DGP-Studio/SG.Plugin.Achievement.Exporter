@@ -32,11 +32,16 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
             }
         }
 
-        public ModifierKeys ModifierKey =>
-            (Windows ? ModifierKeys.Win : ModifierKeys.None) |
-            (Control ? ModifierKeys.Control : ModifierKeys.None) |
-            (Shift ? ModifierKeys.Shift : ModifierKeys.None) |
-            (Alt ? ModifierKeys.Alt : ModifierKeys.None);
+        public ModifierKeys ModifierKey
+        {
+            get
+            {
+                return (Windows ? ModifierKeys.Win : ModifierKeys.None) |
+(Control ? ModifierKeys.Control : ModifierKeys.None) |
+(Shift ? ModifierKeys.Shift : ModifierKeys.None) |
+(Alt ? ModifierKeys.Alt : ModifierKeys.None);
+            }
+        }
 
         public Hotkey()
         {
@@ -52,15 +57,25 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
                 {
                     string k = keyStr.ToLowerInvariant();
                     if (k == "win")
+                    {
                         Windows = true;
+                    }
                     else if (k == "ctrl")
+                    {
                         Control = true;
+                    }
                     else if (k == "shift")
+                    {
                         Shift = true;
+                    }
                     else if (k == "alt")
+                    {
                         Alt = true;
+                    }
                     else
+                    {
                         Key = (Keys)Enum.Parse(typeof(Keys), keyStr);
+                    }
                 }
             }
             catch

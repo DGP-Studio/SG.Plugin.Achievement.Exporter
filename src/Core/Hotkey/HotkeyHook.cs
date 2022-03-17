@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snap.Win32.NativeMethod;
+using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -40,7 +41,7 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
             }
         }
 
-        private DummyWindow window;
+        private readonly DummyWindow window;
         private int currentId;
 
         public HotkeyHook()
@@ -52,12 +53,16 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
         public void Register(ModifierKeys modifier, Keys key)
         {
             currentId += 1;
-            if (!NativeMethod.RegisterHotKey(window.Handle, currentId, (uint)modifier, (uint)key))
+            if (!User32.RegisterHotKey(window.Handle, currentId, (uint)modifier, (uint)key))
             {
                 if (Marshal.GetLastWin32Error() == 1409)
+                {
                     throw new InvalidOperationException("热键已经被占用");
+                }
                 else
+                {
                     throw new InvalidOperationException("热键注册失败");
+                }
             }
         }
 
@@ -65,7 +70,7 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
         {
             for (int i = currentId; i > 0; i--)
             {
-                NativeMethod.UnregisterHotKey(window.Handle, i);
+                User32.UnregisterHotKey(window.Handle, i);
             }
         }
 

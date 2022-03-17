@@ -1,4 +1,6 @@
-﻿using Snap.Data.Json;
+﻿using Achievement.Exporter.Plugin.Helper;
+using Achievement.Exporter.Plugin.Model;
+using Snap.Data.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +20,7 @@ namespace Achievement.Exporter.Plugin
         /// </summary>
         public Dictionary<int, ExistAchievement>? AchievementDic { get; set; }
 
-        public static PaimonMoeJson Builder()
+        public static PaimonMoeJson Build()
         {
             static byte[] GetBytes(string uriString)
             {
@@ -34,14 +36,14 @@ namespace Achievement.Exporter.Plugin
             return paimonMoe;
         }
 
-        public ExistAchievement Matching(string edition, OcrAchievement ocrAchievement)
+        public ExistAchievement Match(string category, OcrAchievement achievement)
         {
-            Dictionary<int, ExistAchievement> dic = List2Dic(All![edition]);
+            Dictionary<int, ExistAchievement> dic = List2Dic(All![category]);
             double max = 0;
             ExistAchievement maxMatch = null!;
-            foreach (ExistAchievement existAchievement in All[edition])
+            foreach (ExistAchievement existAchievement in All[category])
             {
-                double n = Matching(ocrAchievement, existAchievement);
+                double n = Matching(achievement, existAchievement);
 
                 if (n > max)
                 {
@@ -51,14 +53,14 @@ namespace Achievement.Exporter.Plugin
             }
             if (max > 0.6 && maxMatch != null)
             {
-                if (!string.IsNullOrWhiteSpace(ocrAchievement.OcrText) && ocrAchievement.OcrText.Contains("达成"))
+                if (!string.IsNullOrWhiteSpace(achievement.OcrText) && achievement.OcrText.Contains("达成"))
                 {
-                    ocrAchievement.Match = maxMatch;
-                    maxMatch.ocrAchievement = ocrAchievement;
+                    achievement.Match = maxMatch;
+                    maxMatch.ocrAchievement = achievement;
                     // 成就集合要再次匹配描述，并把下级成就给完成
                     if (maxMatch.levels?.Count > 1)
                     {
-                        MatchingMutilLevels(ocrAchievement, maxMatch, dic);
+                        MatchingMutilLevels(achievement, maxMatch, dic);
                     }
                     else
                     {
@@ -68,7 +70,7 @@ namespace Achievement.Exporter.Plugin
             }
             else
             {
-                Trace.WriteLine($"{ocrAchievement.OcrAchievementName} 最小匹配 {maxMatch?.name} 匹配度 {max}");
+                Trace.WriteLine($"{achievement.OcrAchievementName} 最小匹配 {maxMatch?.name} 匹配度 {max}");
             }
 
             return maxMatch!;
@@ -80,7 +82,7 @@ namespace Achievement.Exporter.Plugin
             {
                 return -1;
             }
-            return TextUtils.Similarity(ocr.OcrAchievementName, exist.name!);
+            return TextHelper.Similarity(ocr.OcrAchievementName, exist.name!);
         }
 
         /// <summary>

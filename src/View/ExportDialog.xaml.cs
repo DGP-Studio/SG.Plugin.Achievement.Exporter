@@ -1,9 +1,10 @@
-﻿using ModernWpf.Controls;
+﻿using Achievement.Exporter.Plugin.Helper;
+using ModernWpf.Controls;
 using Snap.Win32;
 using System;
 using System.Windows;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.View
 {
     public sealed partial class ExportDialog : ContentDialog
     {
@@ -13,8 +14,8 @@ namespace Achievement.Exporter.Plugin
 
         public string JsCode
         {
-            get { return (string)GetValue(JsCodeProperty); }
-            set { SetValue(JsCodeProperty, value); }
+            get => (string)GetValue(JsCodeProperty);
+            set => SetValue(JsCodeProperty, value);
         }
         public static readonly DependencyProperty JsCodeProperty = DependencyProperty.Register("JsCode", typeof(string), typeof(ExportDialog), new PropertyMetadata(string.Empty));
 
@@ -37,9 +38,9 @@ namespace Achievement.Exporter.Plugin
             };
             JsCode = stext switch
             {
-                Export1 => TextUtils.GenerateCocogoatWorkJS("天地万象", paimonMoeJson),
-                Export2 => TextUtils.GeneratePaimonMoeJS("天地万象", paimonMoeJson),
-                Export3 => TextUtils.GenerateSeelieMeJS("天地万象", paimonMoeJson),
+                Export1 => TextHelper.GenerateCocogoatWorkJS("天地万象", paimonMoeJson),
+                Export2 => TextHelper.GeneratePaimonMoeJS("天地万象", paimonMoeJson),
+                Export3 => TextHelper.GenerateSeelieMeJS("天地万象", paimonMoeJson),
                 _ => throw new NotImplementedException(),
             };
         }

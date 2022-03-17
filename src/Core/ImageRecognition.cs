@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Achievement.Exporter.Plugin.Model;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -14,7 +15,7 @@ namespace Achievement.Exporter.Plugin
         /// <summary>
         /// 计算出选区矩形
         /// </summary>
-        public static Rectangle CalculateCatchArea(Bitmap imgSrc)
+        public static Rectangle CalculateSampleArea(Bitmap imgSrc)
         {
             BitmapData data = imgSrc.LockBits(new Rectangle(0, 0, imgSrc.Width, imgSrc.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 

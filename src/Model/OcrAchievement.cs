@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.Ocr;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Model
 {
     [Serializable]
     public class OcrAchievement : ICloneable<OcrAchievement>
@@ -50,6 +50,15 @@ namespace Achievement.Exporter.Plugin
         public string? GameId { get; set; }
 
         public ExistAchievement? Match { get; set; }
+        public OcrAchievement()
+        {
+
+        }
+        public OcrAchievement(Bitmap image,string imagePath)
+        {
+            Image = image;
+            ImagePath = imagePath;
+        }
 
         public OcrAchievement Clone()
         {
@@ -71,7 +80,7 @@ namespace Achievement.Exporter.Plugin
             double margin = horizontalY / 4; // 用于边缘容错
             double verticalX = Image.Width * 1.0 / 2;
             OcrResult ocrResult = await OcrHelper.RecognizeAsync(ImagePath!, engine);
-            foreach (var line in ocrResult.Lines)
+            foreach (OcrLine? line in ocrResult.Lines)
             {
                 Rect firstRect = line.Words[0].BoundingRect;
                 string lineStr = line.Concat();

@@ -12,28 +12,53 @@ namespace Achievement.Exporter.Plugin
         private IntPtr hwnd;
         private IntPtr hdc;
 
-        public void Start()
+        /// <summary>
+        /// 获取一次捕获会话，在会话期间可以正常采样
+        /// </summary>
+        /// <returns></returns>
+        public IDisposable Session()
         {
             hwnd = User32.GetDesktopWindow();
             hdc = User32.GetDC(hwnd);
+            return new ImageCapturingDisposable(this);
         }
 
-        public Bitmap Capture(int left, int top, int width, int height)
+        /// <summary>
+        /// 采样
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public Bitmap Sample(int left, int top, int width, int height)
         {
             Bitmap bmp = new(width, height);
-            Graphics bmpGraphic = Graphics.FromImage(bmp);
-            IntPtr bmpHdc = bmpGraphic.GetHdc();
-
-            //copy it
-            _ = GDI32.StretchBlt(bmpHdc, 0, 0, width, height, hdc, left, top, width, height, GDI32.CopyPixelOperation.SourceCopy);
-            bmpGraphic.ReleaseHdc();
+            using (Graphics bmpGraphic = Graphics.FromImage(bmp))
+            {
+                IntPtr bmpHdc = bmpGraphic.GetHdc();
+                _ = GDI32.StretchBlt(bmpHdc, 0, 0, width, height, hdc, left, top, width, height, GDI32.CopyPixelOperation.SourceCopy);
+            }
 
             return bmp;
         }
 
-        public void Stop()
+        private void Stop()
         {
             User32.ReleaseDC(hwnd, hdc);
+        }
+
+        private class ImageCapturingDisposable : IDisposable
+        {
+            private readonly ImageCapturing _imageCapturing;
+            public ImageCapturingDisposable(ImageCapturing imageCapturing)
+            {
+                _imageCapturing = imageCapturing;
+            }
+            public void Dispose()
+            {
+                _imageCapturing.Stop();
+            }
         }
     }
 }

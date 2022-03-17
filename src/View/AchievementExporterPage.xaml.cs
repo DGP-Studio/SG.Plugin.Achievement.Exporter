@@ -1,13 +1,10 @@
 ﻿using Achievement.Exporter.Plugin.Core;
 using Achievement.Exporter.Plugin.ViewModel;
-using ModernWpf.Controls;
 using Snap.Core.DependencyInjection;
 using Snap.Core.Logging;
 using System;
-using System.Diagnostics;
-using System.Windows.Forms;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.View
 {
     [View(InjectAs.Transient)]
     internal partial class AchievementExporterPage : System.Windows.Controls.Page
@@ -33,15 +30,6 @@ namespace Achievement.Exporter.Plugin
                 logs.Clear();
                 _ = manager.StartAsync();
             };
-
-            //buttonExport.Click += async (s, e) =>
-            //{
-            //    ContentDialogResult result = await new ExportDialog(manager.paimonMoeJson).ShowAsync();
-
-            //    if (result is not ContentDialogResult.Primary)
-            //    {
-            //    }
-            //};
 
             manager.ProgressUpdated += (s, e) =>
             {

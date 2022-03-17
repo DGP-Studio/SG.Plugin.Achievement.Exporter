@@ -1,12 +1,10 @@
-﻿using ModernWpf;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.View.Converter
 {
-    internal class BooleanToBrushSelectorConverter : IValueConverter
+    internal class BooleanToStringSelectorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -23,19 +21,10 @@ namespace Achievement.Exporter.Plugin
             if (parameter is string @string)
             {
                 string[] ps = @string.Split(';');
-                string p = !flag ? ps[0] : ps[1];
 
-                if (p == "null")
-                {
-                    p = ThemeManager.Current.ApplicationTheme == ApplicationTheme.Dark ? "White" : "Black";
-                }
-                else if (!p.StartsWith("#"))
-                {
-                    p = $"#{p}";
-                }
-                return new BrushConverter().ConvertFromString(p)!;
+                return !flag ? ps[0] : ps[1];
             }
-            return Brushes.Black;
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

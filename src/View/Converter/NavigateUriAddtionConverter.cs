@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.View.Converter
 {
     internal class NavigateUriAddtionConverter : IValueConverter
     {
@@ -11,7 +11,10 @@ namespace Achievement.Exporter.Plugin
             if (value is string @string)
             {
                 if (!@string.StartsWith("https"))
+                {
                     @string = $"https://{@string}";
+                }
+
                 return new Uri(@string);
             }
             return new Uri(string.Empty);

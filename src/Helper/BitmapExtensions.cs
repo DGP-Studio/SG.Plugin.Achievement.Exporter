@@ -7,7 +7,7 @@ namespace Achievement.Exporter.Plugin.Helper
 {
     internal static class BitmapExtensions
     {
-        public static Bitmap FromFile(string path)
+        public static Bitmap FromFile(this string path)
         {
             byte[] bytes = File.ReadAllBytes(path);
             MemoryStream stream = new(bytes);

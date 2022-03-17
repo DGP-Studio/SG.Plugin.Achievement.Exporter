@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Achievement.Exporter.Plugin.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Achievement.Exporter.Plugin

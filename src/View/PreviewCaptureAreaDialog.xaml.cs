@@ -1,11 +1,11 @@
 ﻿using ModernWpf.Controls;
 using System.Windows.Media;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.View
 {
-    public partial class PreviewCaptureAreaDialog : ContentDialog
+    public sealed partial class PreviewCaptureAreaDialog : ContentDialog
     {
-        public ImageSource PreviewSource { get; set; }
+        public ImageSource PreviewSource { get; }
 
         public PreviewCaptureAreaDialog(ImageSource imageSource)
         {

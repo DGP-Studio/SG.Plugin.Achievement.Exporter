@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Achievement.Exporter.Plugin
+namespace Achievement.Exporter.Plugin.Helper
 {
-    public class TextUtils
+    public class TextHelper
     {
         public static double Similarity(string txt1, string txt2)
         {
@@ -18,7 +18,7 @@ namespace Achievement.Exporter.Plugin
             List<int> arrA = new();
             List<int> arrB = new();
 
-            foreach (var str in sl)
+            foreach (char str in sl)
             {
                 arrA.Add(sl1.Where(x => x == str).Count());
                 arrB.Add(sl2.Where(x => x == str).Count());
@@ -73,7 +73,7 @@ namespace Achievement.Exporter.Plugin
 */
 ";
 
-                paimonMoeJs+="const b = [" + paimonMoeJsItem + @"];
+            paimonMoeJs += "const b = [" + paimonMoeJsItem + @"];
 const a = (await localforage.getItem('achievement')) || { };
             b.forEach(c => { a[c[0]] = a[c[0]] ||{ }; a[c[0]][c[1]] = true})
 await localforage.setItem('achievement', a);

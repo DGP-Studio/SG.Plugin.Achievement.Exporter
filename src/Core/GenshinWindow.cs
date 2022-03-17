@@ -79,6 +79,9 @@ namespace Achievement.Exporter.Plugin.Core
             _ = User32.MouseEvent(User32.MouseEventFlag.Wheel, 0, 0, 120, 0);
         }
 
+        /// <summary>
+        /// 模拟向下滚动
+        /// </summary>
         public void MouseWheelDown()
         {
             _ = User32.MouseEvent(User32.MouseEventFlag.Wheel, 0, 0, -120, 0);
@@ -93,7 +96,7 @@ namespace Achievement.Exporter.Plugin.Core
 
         public void MoveCursor(int x, int y)
         {
-            NativeMethod.SetCursorPos(x, y);
+            User32.SetCursorPos(x, y);
         }
 
         public void MouseLeftDown()
@@ -114,6 +117,12 @@ namespace Achievement.Exporter.Plugin.Core
             User32.PostMessage(HWND, User32.WM_LBUTTONUP, 0, p);
         }
 
+        /// <summary>
+        /// 模拟点击
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="h"></param>
         public void Click(int x, int y, int h)
         {
             MouseMove(x, y + h / 2);
