@@ -54,7 +54,7 @@ namespace Achievement.Exporter.Plugin.Model
         {
 
         }
-        public OcrAchievement(Bitmap image,string imagePath)
+        public OcrAchievement(Bitmap image, string imagePath)
         {
             Image = image;
             ImagePath = imagePath;
