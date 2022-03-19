@@ -1,6 +1,5 @@
 ﻿using Achievement.Exporter.Plugin.Core;
 using Achievement.Exporter.Plugin.ViewModel;
-using ModernWpf.Controls;
 using Snap.Core.DependencyInjection;
 using Snap.Core.Logging;
 using System;

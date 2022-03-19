@@ -34,7 +34,7 @@ namespace Achievement.Exporter.Plugin.Core
         private readonly ImageCapturing capturing = new();
         private readonly GenshinWindow window = new();
 
-        //原神窗口位置
+        // 原神窗口位置
         private int left, top, width, height;
 
         /// <summary>
@@ -119,14 +119,14 @@ namespace Achievement.Exporter.Plugin.Core
                 {
                     capturingStopFlag = false;
 
-                    //切换到原神窗口
+                    // 切换到原神窗口
                     Notify("切换到原神窗口");
                     window.Focus();
                     await Task.Delay(200);
 
                     Bitmap genshinWindowCapture = RenderGenshinWindowCapture();
 
-                    //使用新的坐标
+                    // 使用新的坐标
                     LocateAchievementArea(genshinWindowCapture);
 
                     App.Current.MainWindow.Focus();
@@ -140,7 +140,7 @@ namespace Achievement.Exporter.Plugin.Core
                     window.Focus();
                     await Task.Delay(200);
 
-                    Notify($"0.5s后开始自动滚动截图，按{StopHotkey}终止滚动！");
+                    Notify($"开始自动滚动截图，按{StopHotkey}终止滚动！");
                     await Task.Delay(500);
                     window.Click(left, top, height);
 
@@ -174,7 +174,7 @@ namespace Achievement.Exporter.Plugin.Core
         {
             await Task.Run(async () =>
             {
-                // 3. 滚动截图
+                // 滚动截图
                 int rowIn = 0, rowOut = 0, n = 0;
 
                 while (rowIn < 15 && rowOut < 15)
@@ -219,12 +219,12 @@ namespace Achievement.Exporter.Plugin.Core
                     lastPagePic.Save(Path.Combine(imgPagePath, ++n + ".png"));
                     Notify("滚动截图完成");
 
-                    //分割截图
+                    // 分割截图
                     Notify("截图处理中...");
                     PageToSection();
                     Notify("截图处理完成");
 
-                    //OCR
+                    // OCR
                     List<OcrAchievement> list = LoadImageSection();
                     Notify("文字识别中...");
                     await OcrAsync(list);
@@ -242,10 +242,9 @@ namespace Achievement.Exporter.Plugin.Core
         /// <summary>
         /// 捕获原神窗口截图
         /// </summary>
-        /// <returns></returns>
         private Bitmap RenderGenshinWindowCapture()
         {
-            //定位截图选区
+            // 定位截图选区
             Rectangle genshinRect = window.GetSize();
             left = (int)Math.Ceiling(genshinRect.X * PrimaryScreen.ScaleX);
             top = (int)Math.Ceiling(genshinRect.Y * PrimaryScreen.ScaleY);

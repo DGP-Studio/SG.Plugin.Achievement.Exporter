@@ -70,8 +70,8 @@ namespace Achievement.Exporter.Plugin.ViewModel
                 //haven't cancelled
                 while (!token.IsCancellationRequested)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(2), token).ConfigureAwait(false);
                     WindowHandleFound = ProcessExists("YuanShen") || ProcessExists("GenshinImpact");
+                    await Task.Delay(TimeSpan.FromSeconds(2), token).ConfigureAwait(false);
                 }
             }
             catch (TaskCanceledException)

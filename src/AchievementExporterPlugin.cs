@@ -39,7 +39,7 @@ namespace Achievement.Exporter.Plugin
 
         public Version Version
         {
-            get => new("1.0.0");
+            get => new("1.0.1");
         }
 
         public bool IsEnabled { get; set; }
