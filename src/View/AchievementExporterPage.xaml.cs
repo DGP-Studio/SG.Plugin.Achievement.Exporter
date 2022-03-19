@@ -1,5 +1,6 @@
 ﻿using Achievement.Exporter.Plugin.Core;
 using Achievement.Exporter.Plugin.ViewModel;
+using ModernWpf.Controls;
 using Snap.Core.DependencyInjection;
 using Snap.Core.Logging;
 using System;
@@ -29,6 +30,11 @@ namespace Achievement.Exporter.Plugin.View
                 SetIsEnabled(false);
                 logs.Clear();
                 _ = manager.StartAsync();
+            };
+
+            buttonExport.Click += (s, e) =>
+            {
+                _ = new ExportDialog(manager.paimonMoeJson).ShowAsync();
             };
 
             manager.ProgressUpdated += (s, e) =>

@@ -34,6 +34,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
+                <Button Content="&#xE8C8;" Margin="12,0,0,0" Grid.Column="1" VerticalAlignment="Top"
+                                    FontFamily="{StaticResource SymbolThemeFontFamily}" ToolTipService.ToolTip="复制到剪贴板" Click="CopyCodeButtonClick"/>
                 <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}" Text="{Binding JsCode}"/>
             </Grid>
         </Border>

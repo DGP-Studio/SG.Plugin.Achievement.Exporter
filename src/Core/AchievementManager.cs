@@ -147,6 +147,7 @@ namespace Achievement.Exporter.Plugin.Core
                     PathContext.CreateFolderOrIgnore(userDataPath);
                     PathContext.CreateFolderOrIgnore(imgPagePath);
                     PathContext.DeleteFolderOrIgnore(imgPagePath);
+                    PathContext.CreateFolderOrIgnore(imgPagePath);
 
                     paimonMoeJson = PaimonMoeJson.Build();
                     await ScrollCaptureAsync();
@@ -266,6 +267,7 @@ namespace Achievement.Exporter.Plugin.Core
         {
             PathContext.CreateFolderOrIgnore(imgSectionPath);
             PathContext.DeleteFolderOrIgnore(imgSectionPath);
+            PathContext.CreateFolderOrIgnore(imgSectionPath);
 
             DirectoryInfo dir = new(imgPagePath);
             FileInfo[] fileInfo = dir.GetFiles();
