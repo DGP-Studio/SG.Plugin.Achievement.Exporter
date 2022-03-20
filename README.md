@@ -1,5 +1,9 @@
 # Snap Genshin 插件-成就识别
 
+![](https://img.shields.io/github/license/DGP-Studio/SG.Plugin.Achievement.Exporter?color=blue)
+![](https://img.shields.io/github/stars/DGP-Studio/SG.Plugin.Achievement.Exporter?color=blue)
+![](https://img.shields.io/github/forks/DGP-Studio/SG.Plugin.Achievement.Exporter?color=blue)
+
 ## 说明
 
 > 原神成就识别，主要用于快速查找未完成的隐藏成就，目前只支持“天地万象”的成就导出。
@@ -14,7 +18,9 @@
 > 解决方案移植自：[genshin-achievement-toy](https://github.com/babalae/genshin-achievement-toy)
 
 ## 下载
-[下载页](https://github.com/emako/SG.Plugin.Drop.Wish/releases/latest)
+[![GitHub downloads](https://img.shields.io/github/downloads/DGP-Studio/SG.Plugin.Achievement.Exporter/total)](https://github.com/DGP-Studio/SG.Plugin.Achievement.Exporter/releases)
+[![GitHub downloads](https://img.shields.io/github/downloads/DGP-Studio/SG.Plugin.Achievement.Exporter/latest/total)](https://github.com/DGP-Studio/SG.Plugin.Achievement.Exporter/releases)
+[下载页](https://github.com/DGP-Studio/SG.Plugin.Achievement.Exporter/releases/latest)
 
 ## 使用方法
 
@@ -31,6 +37,4 @@
   - 因为游戏以管理员权限启动，软件不以管理员权限启动的话没法模拟鼠标点击与滚动。
 - ~~如何修改停止快捷键（F11）以及其他程序参数？~~
   - ~~软件同级目录下的 `config.json` 可以修改相关参数。~~
-- 多次点击识别时报错？
-  - 重启软件，建议每次识别成就都重启下软件。
 
