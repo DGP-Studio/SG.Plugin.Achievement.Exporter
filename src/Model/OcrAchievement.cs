@@ -101,7 +101,7 @@ namespace Achievement.Exporter.Plugin.Model
             List<OcrLine> leftLines = ocrResult.Lines
                 .Where(line => line.Words[0].BoundingRect.Left < verticalX)
                 .OrderBy(line => line.Words[0].BoundingRect.Top).ToList();
-            foreach (var line in leftLines)
+            foreach (OcrLine? line in leftLines)
             {
                 OcrLeftText += line.Concat(); // 实际用于文本比较的内容
             }
@@ -116,7 +116,7 @@ namespace Achievement.Exporter.Plugin.Model
             }
 
             List<OcrLine> rightLines = ocrResult.Lines.Where(line => line.Words[0].BoundingRect.Left > verticalX).ToList();
-            foreach (var line in rightLines)
+            foreach (OcrLine? line in rightLines)
             {
                 Rect firstRect = line.Words[0].BoundingRect;
                 string lineStr = line.Concat();
