@@ -1,4 +1,4 @@
-﻿using Snap.Data.Utility;
+﻿using Snap.Data.Utility.Extension;
 using System;
 using System.Text;
 using System.Windows.Forms;
