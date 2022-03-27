@@ -37,7 +37,7 @@ namespace Achievement.Exporter.Plugin.Core
             Process[] pros = Process.GetProcessesByName("YuanShen");
             if (pros.Any())
             {
-                HWND = pros[0].MainWindowHandle;
+                this.HWND = pros[0].MainWindowHandle;
                 return true;
             }
             else
@@ -45,7 +45,7 @@ namespace Achievement.Exporter.Plugin.Core
                 pros = Process.GetProcessesByName("GenshinImpact");
                 if (pros.Any())
                 {
-                    HWND = pros[0].MainWindowHandle;
+                    this.HWND = pros[0].MainWindowHandle;
                     return true;
                 }
                 else
@@ -59,9 +59,9 @@ namespace Achievement.Exporter.Plugin.Core
         {
             const int WM_SYSCOMMAND = 0x0112;
             const int SC_RESTORE = 0xF120;
-            _ = User32.SendMessage(HWND, WM_SYSCOMMAND, SC_RESTORE, 0);
-            _ = User32.SetForegroundWindow(HWND);
-            while (User32.IsIconic(HWND))
+            _ = User32.SendMessage(this.HWND, WM_SYSCOMMAND, SC_RESTORE, 0);
+            _ = User32.SetForegroundWindow(this.HWND);
+            while (User32.IsIconic(this.HWND))
             {
                 continue;
             }
@@ -70,7 +70,7 @@ namespace Achievement.Exporter.Plugin.Core
         public Rectangle GetSize()
         {
             RECT rc = new();
-            User32.GetWindowRect(HWND, ref rc);
+            User32.GetWindowRect(this.HWND, ref rc);
             return new Rectangle(rc.Left, rc.Top, rc.Right - rc.Left, rc.Bottom - rc.Top);
         }
 
@@ -112,9 +112,9 @@ namespace Achievement.Exporter.Plugin.Core
         public void MouseClick(int x, int y)
         {
             int p = y << 16 | x;
-            User32.PostMessage(HWND, User32.WM_LBUTTONDOWN, 0, p);
+            User32.PostMessage(this.HWND, User32.WM_LBUTTONDOWN, 0, p);
             Thread.Sleep(100);
-            User32.PostMessage(HWND, User32.WM_LBUTTONUP, 0, p);
+            User32.PostMessage(this.HWND, User32.WM_LBUTTONUP, 0, p);
         }
 
         /// <summary>
@@ -125,9 +125,9 @@ namespace Achievement.Exporter.Plugin.Core
         /// <param name="h"></param>
         public void Click(int x, int y, int h)
         {
-            MouseMove(x, y + h / 2);
-            MouseLeftDown();
-            MouseLeftUp();
+            this.MouseMove(x, y + h / 2);
+            this.MouseLeftDown();
+            this.MouseLeftUp();
         }
 
         [Flags]

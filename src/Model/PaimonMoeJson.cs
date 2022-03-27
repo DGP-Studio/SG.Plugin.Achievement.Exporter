@@ -45,9 +45,9 @@ namespace Achievement.Exporter.Plugin
 
             double max = 0;
             ExistAchievement maxMatch = null!;
-            foreach (ExistAchievement existAchievement in All![edition])
+            foreach (ExistAchievement existAchievement in this.All![edition])
             {
-                double n = Matching(achievement, existAchievement, onlyChinese);
+                double n = this.Matching(achievement, existAchievement, onlyChinese);
                 if (n > max)
                 {
                     max = n;
@@ -64,7 +64,7 @@ namespace Achievement.Exporter.Plugin
                     // 成就集合要再次匹配描述，并把下级成就给完成
                     if (maxMatch.levels != null && maxMatch.levels.Count > 1)
                     {
-                        MatchingMutilLevels(achievement, maxMatch, List2Dic(All[edition]));
+                        this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[edition]));
                     }
                     else
                     {
@@ -77,14 +77,14 @@ namespace Achievement.Exporter.Plugin
                 }
                 else if (maxMatch.levels != null && maxMatch.levels.Count > 1)
                 {
-                    MatchingMutilLevels(achievement, maxMatch, List2Dic(All[edition]), false);
+                    this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[edition]), false);
                 }
             }
             else
             {
                 if (achievement.OcrText.Contains("达成") && !onlyChinese)
                 {
-                    Matching(edition, achievement, true);
+                    this.Matching(edition, achievement, true);
                 }
                 Trace.WriteLine($"{achievement.OcrLeftText} 最小匹配 {maxMatch?.name + maxMatch?.desc} 匹配度 {max}");
             }
@@ -101,9 +101,9 @@ namespace Achievement.Exporter.Plugin
 
             double max = 0;
             ExistAchievement maxMatch = null!;
-            foreach (ExistAchievement existAchievement in All![category])
+            foreach (ExistAchievement existAchievement in this.All![category])
             {
-                double n = Matching(achievement, existAchievement, onlyChinese);
+                double n = this.Matching(achievement, existAchievement, onlyChinese);
 
                 if (n > max)
                 {
@@ -120,7 +120,7 @@ namespace Achievement.Exporter.Plugin
                     // 成就集合要再次匹配描述，并把下级成就给完成
                     if (maxMatch.levels?.Count > 1)
                     {
-                        MatchingMutilLevels(achievement, maxMatch, List2Dic(All[category]));
+                        this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[category]));
                     }
                     else
                     {
@@ -132,7 +132,7 @@ namespace Achievement.Exporter.Plugin
             {
                 if (achievement.OcrText.Contains("达成") && !onlyChinese)
                 {
-                    Matching(category, achievement, true);
+                    this.Matching(category, achievement, true);
                 }
                 Trace.WriteLine($"{achievement.OcrLeftText} 最小匹配 {maxMatch?.name + maxMatch?.desc} 匹配度 {max}");
             }
@@ -183,18 +183,18 @@ namespace Achievement.Exporter.Plugin
             {
                 if (!string.IsNullOrEmpty(ocr.OcrLeftText))
                 {
-                    if (ocr.OcrLeftText.Contains("3"))
+                    if (ocr.OcrLeftText.Contains('3'))
                     {
                         dic[81028].done = done;
                         dic[81027].done = true;
                         dic[81026].done = true;
                     }
-                    else if (ocr.OcrLeftText.Contains("2"))
+                    else if (ocr.OcrLeftText.Contains('2'))
                     {
                         dic[81027].done = done;
                         dic[81026].done = true;
                     }
-                    else if (ocr.OcrLeftText.Contains("1"))
+                    else if (ocr.OcrLeftText.Contains('1'))
                     {
                         dic[81026].done = done;
                     }
@@ -204,18 +204,18 @@ namespace Achievement.Exporter.Plugin
             {
                 if (!string.IsNullOrEmpty(ocr.OcrLeftText))
                 {
-                    if (ocr.OcrLeftText.Contains("3"))
+                    if (ocr.OcrLeftText.Contains('3'))
                     {
                         dic[81031].done = done;
                         dic[81030].done = true;
                         dic[81029].done = true;
                     }
-                    else if (ocr.OcrLeftText.Contains("2"))
+                    else if (ocr.OcrLeftText.Contains('2'))
                     {
                         dic[81030].done = done;
                         dic[81029].done = true;
                     }
-                    else if (ocr.OcrLeftText.Contains("1"))
+                    else if (ocr.OcrLeftText.Contains('1'))
                     {
                         dic[81029].done = done;
                     }

@@ -63,7 +63,7 @@ namespace Achievement.Exporter.Plugin.Helper
             }
             if (paimonMoeJsItem.EndsWith(","))
             {
-                paimonMoeJsItem.Substring(paimonMoeJsItem.Length - 2, 1);
+                _ = paimonMoeJsItem.Substring(paimonMoeJsItem.Length - 2, 1);
             }
             string paimonMoeJs = @"/*
 * 复制此处所有内容，
@@ -93,7 +93,7 @@ await localforage.setItem('achievement', a);
             }
             if (jsItem.EndsWith(","))
             {
-                jsItem.Substring(jsItem.Length - 2, 1);
+                _ = jsItem.Substring(jsItem.Length - 2, 1);
             }
             string js = @"/*
 * 复制此处所有内容，
@@ -124,7 +124,7 @@ location.href='/achievements'";
             }
             if (jsItem.EndsWith(","))
             {
-                jsItem.Substring(jsItem.Length - 2, 1);
+                _ = jsItem.Substring(jsItem.Length - 2, 1);
             }
             string js = @"/*
 * 复制此处所有内容，

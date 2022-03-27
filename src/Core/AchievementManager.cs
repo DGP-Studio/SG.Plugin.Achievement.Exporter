@@ -45,50 +45,50 @@ namespace Achievement.Exporter.Plugin.Core
 
         public bool GenshinStatus
         {
-            get => window.FindWindowHandle();
+            get => this.window.FindWindowHandle();
         }
 
         private AchievementProcessing processing = AchievementProcessing.None;
         public AchievementProcessing Processing
         {
-            get => processing;
+            get => this.processing;
             set
             {
-                processing = value;
-                OnProgressUpdated();
+                this.processing = value;
+                this.OnProgressUpdated();
             }
         }
 
         private double progress = 0d;
         public double Progress
         {
-            get => progress;
+            get => this.progress;
             set
             {
-                progress = value;
-                OnProgressUpdated();
+                this.progress = value;
+                this.OnProgressUpdated();
             }
         }
 
         private double progressMin = 0d;
         public double ProgressMin
         {
-            get => progressMin;
+            get => this.progressMin;
             set
             {
-                progressMin = value;
-                OnProgressUpdated();
+                this.progressMin = value;
+                this.OnProgressUpdated();
             }
         }
 
         private double progressMax = 100d;
         public double ProgressMax
         {
-            get => progressMax;
+            get => this.progressMax;
             set
             {
-                progressMax = value;
-                OnProgressUpdated();
+                this.progressMax = value;
+                this.OnProgressUpdated();
             }
         }
 
@@ -96,11 +96,11 @@ namespace Achievement.Exporter.Plugin.Core
         {
             try
             {
-                RegisterHotKey(StopHotkey);
+                this.RegisterHotKey(StopHotkey);
             }
             catch (Exception ex)
             {
-                Notify(ex.Message);
+                this.Notify(ex.Message);
                 ExceptionCatched?.Invoke(this, new("热键注册失败", ex));
             }
         }
@@ -109,65 +109,65 @@ namespace Achievement.Exporter.Plugin.Core
         {
             try
             {
-                if (!GenshinStatus)
+                if (!this.GenshinStatus)
                 {
-                    Notify("未找到原神进程，请先启动原神！");
-                    Processing = AchievementProcessing.None;
+                    this.Notify("未找到原神进程，请先启动原神！");
+                    this.Processing = AchievementProcessing.None;
                     return;
                 }
-                using (capturing.Session())
+                using (this.capturing.Session())
                 {
-                    capturingStopFlag = false;
+                    this.capturingStopFlag = false;
 
                     // 切换到原神窗口
-                    Notify("切换到原神窗口");
-                    window.Focus();
+                    this.Notify("切换到原神窗口");
+                    this.window.Focus();
                     await Task.Delay(200);
 
-                    Bitmap genshinWindowCapture = RenderGenshinWindowCapture();
+                    Bitmap genshinWindowCapture = this.RenderGenshinWindowCapture();
 
                     // 使用新的坐标
-                    LocateAchievementArea(genshinWindowCapture);
+                    this.LocateAchievementArea(genshinWindowCapture);
 
                     App.Current.MainWindow.Focus();
-                    BitmapImage preview = capturing.Sample(left, top, width, height).ToBitmapImage();
+                    BitmapImage preview = this.capturing.Sample(this.left, this.top, this.width, this.height).ToBitmapImage();
                     ContentDialogResult result = await new PreviewCaptureAreaDialog(preview).ShowAsync();
                     if (result is not ContentDialogResult.Primary)
                     {
-                        Processing = AchievementProcessing.None;
+                        this.Processing = AchievementProcessing.None;
                         return;
                     }
-                    window.Focus();
+                    this.window.Focus();
                     await Task.Delay(200);
 
-                    Notify($"开始自动滚动截图，按{StopHotkey}终止滚动！");
+                    this.Notify($"开始自动滚动截图，按{StopHotkey}终止滚动！");
                     await Task.Delay(500);
-                    window.Click(left, top, height);
+                    this.window.Click(this.left, this.top, this.height);
 
                     PathContext.CreateFolderOrIgnore(userDataPath);
                     PathContext.CreateFolderOrIgnore(imgPagePath);
                     PathContext.DeleteFolderOrIgnore(imgPagePath);
                     PathContext.CreateFolderOrIgnore(imgPagePath);
 
-                    paimonMoeJson = PaimonMoeJson.Build();
-                    await ScrollCaptureAsync();
+                    this.paimonMoeJson = PaimonMoeJson.Build();
+                    await this.ScrollCaptureAsync();
                 }
             }
             catch (Exception e)
             {
                 ExceptionCatched?.Invoke(this, new("错误", e));
             }
-            Processing = AchievementProcessing.None;
+            this.Processing = AchievementProcessing.None;
         }
 
         private void LocateAchievementArea(Bitmap genshinWindowCapture)
         {
             Rectangle rect = ImageRecognition.CalculateSampleArea(genshinWindowCapture);
-            Notify("已定位成就栏位置");
-            left += rect.X;
-            top += rect.Y;
-            width = rect.Width + 2;
-            height = rect.Height;
+            this.Notify("已定位成就栏位置");
+            this.left += rect.X;
+            this.top += rect.Y;
+            this.width = rect.Width + 2;
+            this.height = rect.Height;
         }
 
         private async Task ScrollCaptureAsync()
@@ -179,20 +179,20 @@ namespace Achievement.Exporter.Plugin.Core
 
                 while (rowIn < 15 && rowOut < 15)
                 {
-                    if (capturingStopFlag)
+                    if (this.capturingStopFlag)
                     {
-                        Notify("滚动已经终止");
+                        this.Notify("滚动已经终止");
                         break;
                     }
                     try
                     {
-                        Bitmap pagePic = capturing.Sample(left, top, width, height);
+                        Bitmap pagePic = this.capturing.Sample(this.left, this.top, this.width, this.height);
                         if (n % CaptureInterval == 0)
                         {
                             pagePic.Save(Path.Combine(imgPagePath, n + ".png"));
                         }
 
-                        Bitmap onePixHightPic = capturing.Sample(left, top + height - 20, width, 1); // 截取一个1pix的长条
+                        Bitmap onePixHightPic = this.capturing.Sample(this.left, this.top + this.height - 20, this.width, 1); // 截取一个1pix的长条
                         if (ImageRecognition.IsInRow(onePixHightPic))
                         {
                             rowIn++;
@@ -206,35 +206,35 @@ namespace Achievement.Exporter.Plugin.Core
                     }
                     catch (Exception ex)
                     {
-                        Notify(ex.Message + Environment.NewLine + ex.StackTrace);
+                        this.Notify(ex.Message + Environment.NewLine + ex.StackTrace);
                     }
 
-                    window.Click(left, top, height);
-                    window.MouseWheelDown();
+                    this.window.Click(this.left, this.top, this.height);
+                    this.window.MouseWheelDown();
                     n++;
                 }
-                if (!capturingStopFlag)
+                if (!this.capturingStopFlag)
                 {
-                    Bitmap lastPagePic = capturing.Sample(left, top, width, height);
+                    Bitmap lastPagePic = this.capturing.Sample(this.left, this.top, this.width, this.height);
                     lastPagePic.Save(Path.Combine(imgPagePath, ++n + ".png"));
-                    Notify("滚动截图完成");
+                    this.Notify("滚动截图完成");
 
                     // 分割截图
-                    Notify("截图处理中...");
-                    PageToSection();
-                    Notify("截图处理完成");
+                    this.Notify("截图处理中...");
+                    this.PageToSection();
+                    this.Notify("截图处理完成");
 
                     // OCR
-                    List<OcrAchievement> list = LoadImageSection();
-                    Notify("文字识别中...");
-                    await OcrAsync(list);
-                    Notify("文字识别完成");
+                    List<OcrAchievement> list = this.LoadImageSection();
+                    this.Notify("文字识别中...");
+                    await this.OcrAsync(list);
+                    this.Notify("文字识别完成");
 
                     await Task.Delay(100);
-                    Notify("成就匹配中...");
-                    Match(list);
-                    Notify("成就匹配完成");
-                    Notify($"你可以点击对应的按钮导出成就啦~");
+                    this.Notify("成就匹配中...");
+                    this.Match(list);
+                    this.Notify("成就匹配完成");
+                    this.Notify($"你可以点击对应的按钮导出成就啦~");
                 }
             });
         }
@@ -245,18 +245,18 @@ namespace Achievement.Exporter.Plugin.Core
         private Bitmap RenderGenshinWindowCapture()
         {
             // 定位截图选区
-            Rectangle genshinRect = window.GetSize();
-            left = (int)Math.Ceiling(genshinRect.X * PrimaryScreen.ScaleX);
-            top = (int)Math.Ceiling(genshinRect.Y * PrimaryScreen.ScaleY);
-            width = (int)Math.Ceiling(genshinRect.Width * PrimaryScreen.ScaleX);
-            height = (int)Math.Ceiling(genshinRect.Height * PrimaryScreen.ScaleY);
+            Rectangle genshinRect = this.window.GetSize();
+            this.left = (int)Math.Ceiling(genshinRect.X * PrimaryScreen.ScaleX);
+            this.top = (int)Math.Ceiling(genshinRect.Y * PrimaryScreen.ScaleY);
+            this.width = (int)Math.Ceiling(genshinRect.Width * PrimaryScreen.ScaleX);
+            this.height = (int)Math.Ceiling(genshinRect.Height * PrimaryScreen.ScaleY);
 
-            return capturing.Sample(left, top, width, height);
+            return this.capturing.Sample(this.left, this.top, this.width, this.height);
         }
 
         private void OnProgressUpdated()
         {
-            ProgressUpdated?.Invoke(this, (Processing, Progress, ProgressMin, ProgressMax));
+            ProgressUpdated?.Invoke(this, (this.Processing, this.Progress, this.ProgressMin, this.ProgressMax));
         }
 
         /// <summary>
@@ -271,9 +271,9 @@ namespace Achievement.Exporter.Plugin.Core
             DirectoryInfo dir = new(imgPagePath);
             FileInfo[] fileInfo = dir.GetFiles();
 
-            Processing = AchievementProcessing.PageToSection;
-            ProgressMax = fileInfo.Length;
-            Progress = 0d;
+            this.Processing = AchievementProcessing.PageToSection;
+            this.ProgressMax = fileInfo.Length;
+            this.Progress = 0d;
             foreach (FileInfo item in fileInfo)
             {
                 Bitmap imgPage = BitmapExtensions.FromFile(item.FullName);
@@ -283,7 +283,7 @@ namespace Achievement.Exporter.Plugin.Core
                     //list[i].Binary();
                     list[i].Save(Path.Combine(imgSectionPath, item.Name + "_" + i + ".png"));
                 }
-                Progress++;
+                this.Progress++;
             }
         }
 
@@ -299,26 +299,26 @@ namespace Achievement.Exporter.Plugin.Core
         {
             OcrEngine engine = OcrEngine.TryCreateFromLanguage(new("zh-Hans-CN"));
 
-            Processing = AchievementProcessing.Ocr;
-            ProgressMax = achievementList.Count;
-            Progress = 0d;
+            this.Processing = AchievementProcessing.Ocr;
+            this.ProgressMax = achievementList.Count;
+            this.Progress = 0d;
             foreach (OcrAchievement a in achievementList)
             {
                 string r = await a.OcrAsync(engine);
                 this.Log(r);
-                Progress++;
+                this.Progress++;
             }
         }
 
         private void Match(List<OcrAchievement> achievementList)
         {
-            Processing = AchievementProcessing.Matching;
-            ProgressMax = achievementList.Count;
-            Progress = 0d;
+            this.Processing = AchievementProcessing.Matching;
+            this.ProgressMax = achievementList.Count;
+            this.Progress = 0d;
             foreach (OcrAchievement achievement in achievementList)
             {
-                paimonMoeJson.Match("天地万象", achievement);
-                Progress++;
+                this.paimonMoeJson.Match("天地万象", achievement);
+                this.Progress++;
             }
         }
 
@@ -336,7 +336,7 @@ namespace Achievement.Exporter.Plugin.Core
         {
             if (string.IsNullOrEmpty(hotkeyStr))
             {
-                UnregisterHotKey();
+                this.UnregisterHotKey();
                 return;
             }
 
@@ -344,7 +344,7 @@ namespace Achievement.Exporter.Plugin.Core
 
             hotkeyHook?.Dispose();
             hotkeyHook = new HotkeyHook();
-            hotkeyHook.KeyPressed += (_, _) => capturingStopFlag = true;
+            hotkeyHook.KeyPressed += (_, _) => this.capturingStopFlag = true;
             hotkeyHook.Register(hotkey.ModifierKey, hotkey.Key);
         }
 

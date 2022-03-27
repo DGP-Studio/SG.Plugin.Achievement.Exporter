@@ -11,8 +11,8 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
         internal KeyPressedEventArgs(ModifierKeys modifier, Keys key)
         {
-            Modifier = modifier;
-            Key = key;
+            this.Modifier = modifier;
+            this.Key = key;
         }
     }
 }

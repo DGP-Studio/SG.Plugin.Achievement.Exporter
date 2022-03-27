@@ -18,8 +18,8 @@ namespace Achievement.Exporter.Plugin
         /// <returns></returns>
         public IDisposable Session()
         {
-            hwnd = User32.GetDesktopWindow();
-            hdc = User32.GetDC(hwnd);
+            this.hwnd = User32.GetDesktopWindow();
+            this.hdc = User32.GetDC(this.hwnd);
             return new ImageCapturingDisposable(this);
         }
 
@@ -37,7 +37,7 @@ namespace Achievement.Exporter.Plugin
             using (Graphics bmpGraphic = Graphics.FromImage(bmp))
             {
                 IntPtr bmpHdc = bmpGraphic.GetHdc();
-                _ = GDI32.StretchBlt(bmpHdc, 0, 0, width, height, hdc, left, top, width, height, GDI32.CopyPixelOperation.SourceCopy);
+                _ = GDI32.StretchBlt(bmpHdc, 0, 0, width, height, this.hdc, left, top, width, height, GDI32.CopyPixelOperation.SourceCopy);
             }
 
             return bmp;
@@ -45,7 +45,7 @@ namespace Achievement.Exporter.Plugin
 
         private void Stop()
         {
-            User32.ReleaseDC(hwnd, hdc);
+            User32.ReleaseDC(this.hwnd, this.hdc);
         }
 
         private class ImageCapturingDisposable : IDisposable
@@ -53,11 +53,11 @@ namespace Achievement.Exporter.Plugin
             private readonly ImageCapturing _imageCapturing;
             public ImageCapturingDisposable(ImageCapturing imageCapturing)
             {
-                _imageCapturing = imageCapturing;
+                this._imageCapturing = imageCapturing;
             }
             public void Dispose()
             {
-                _imageCapturing.Stop();
+                this._imageCapturing.Stop();
             }
         }
     }
