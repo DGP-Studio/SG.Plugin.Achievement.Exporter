@@ -24,18 +24,18 @@ namespace Achievement.Exporter.Plugin.ViewModel
 
         public double Progress
         {
-            get => this.progress;
-            set => this.SetProperty(ref this.progress, value, nameof(this.Progress));
+            get => progress;
+            set => SetProperty(ref progress, value, nameof(Progress));
         }
         public double ProgressMin
         {
-            get => this.progressMin;
-            set => this.SetProperty(ref this.progressMin, value, nameof(this.ProgressMin));
+            get => progressMin;
+            set => SetProperty(ref progressMin, value, nameof(ProgressMin));
         }
         public double ProgressMax
         {
-            get => this.progressMax;
-            set => this.SetProperty(ref this.progressMax, value, nameof(this.ProgressMax));
+            get => progressMax;
+            set => SetProperty(ref progressMax, value, nameof(ProgressMax));
         }
         public bool IsRunAsAdmin
         {
@@ -44,8 +44,8 @@ namespace Achievement.Exporter.Plugin.ViewModel
 
         public bool WindowHandleFound
         {
-            get => this.windowHandleFound;
-            set => this.SetProperty(ref this.windowHandleFound, value);
+            get => windowHandleFound;
+            set => SetProperty(ref windowHandleFound, value);
         }
 
         public ICommand RestartElevatedCommand { get; }
@@ -53,9 +53,9 @@ namespace Achievement.Exporter.Plugin.ViewModel
 
         public AchievementExporterViewModel()
         {
-            this.CheckForGameExistAsync(this.cancellationTokenSource.Token).Forget();
-            this.RestartElevatedCommand = new RelayCommand(App.RestartAsElevated);
-            this.CloseUICommand = new RelayCommand(this.cancellationTokenSource.Cancel);
+            CheckForGameExistAsync(cancellationTokenSource.Token).Forget();
+            RestartElevatedCommand = new RelayCommand(App.RestartAsElevated);
+            CloseUICommand = new RelayCommand(cancellationTokenSource.Cancel);
         }
 
         public async Task CheckForGameExistAsync(CancellationToken token)
@@ -70,7 +70,7 @@ namespace Achievement.Exporter.Plugin.ViewModel
                 //haven't cancelled
                 while (!token.IsCancellationRequested)
                 {
-                    this.WindowHandleFound = ProcessExists("YuanShen") || ProcessExists("GenshinImpact");
+                    WindowHandleFound = ProcessExists("YuanShen") || ProcessExists("GenshinImpact");
                     await Task.Delay(TimeSpan.FromSeconds(2), token).ConfigureAwait(false);
                 }
             }

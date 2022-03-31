@@ -18,16 +18,16 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
         private Keys key;
         public Keys Key
         {
-            get => this.key;
+            get => key;
             set
             {
                 if (value != Keys.ControlKey && value != Keys.Alt && value != Keys.Menu && value != Keys.ShiftKey)
                 {
-                    this.key = value;
+                    key = value;
                 }
                 else
                 {
-                    this.key = Keys.None;
+                    key = Keys.None;
                 }
             }
         }
@@ -36,16 +36,16 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
         {
             get
             {
-                return (this.Windows ? ModifierKeys.Win : ModifierKeys.None) |
-(this.Control ? ModifierKeys.Control : ModifierKeys.None) |
-(this.Shift ? ModifierKeys.Shift : ModifierKeys.None) |
-(this.Alt ? ModifierKeys.Alt : ModifierKeys.None);
+                return (Windows ? ModifierKeys.Win : ModifierKeys.None) |
+(Control ? ModifierKeys.Control : ModifierKeys.None) |
+(Shift ? ModifierKeys.Shift : ModifierKeys.None) |
+(Alt ? ModifierKeys.Alt : ModifierKeys.None);
             }
         }
 
         public Hotkey()
         {
-            this.Reset();
+            Reset();
         }
 
         public Hotkey(string hotkeyStr)
@@ -58,23 +58,23 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
                     string k = keyStr.ToLowerInvariant();
                     if (k == "win")
                     {
-                        this.Windows = true;
+                        Windows = true;
                     }
                     else if (k == "ctrl")
                     {
-                        this.Control = true;
+                        Control = true;
                     }
                     else if (k == "shift")
                     {
-                        this.Shift = true;
+                        Shift = true;
                     }
                     else if (k == "alt")
                     {
-                        this.Alt = true;
+                        Alt = true;
                     }
                     else
                     {
-                        this.Key = (Keys)Enum.Parse(typeof(Keys), keyStr);
+                        Key = (Keys)Enum.Parse(typeof(Keys), keyStr);
                     }
                 }
             }
@@ -88,25 +88,25 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
         {
             string str = string.Empty;
             StringBuilder stringBuilder = new();
-            if (this.Key != Keys.None)
+            if (Key != Keys.None)
             {
                 stringBuilder
-                    .AppendIf(this.Windows, "win + ")
-                    .AppendIf(this.Control, "ctrl + ")
-                    .AppendIf(this.Shift, "shift + ")
-                    .AppendIf(this.Alt, "alt + ")
-                    .Append(this.Key);
+                    .AppendIf(Windows, "win + ")
+                    .AppendIf(Control, "ctrl + ")
+                    .AppendIf(Shift, "shift + ")
+                    .AppendIf(Alt, "alt + ")
+                    .Append(Key);
             }
             return stringBuilder.ToString();
         }
 
         public void Reset()
         {
-            this.Alt = false;
-            this.Control = false;
-            this.Shift = false;
-            this.Windows = false;
-            this.Key = Keys.None;
+            Alt = false;
+            Control = false;
+            Shift = false;
+            Windows = false;
+            Key = Keys.None;
         }
     }
 }

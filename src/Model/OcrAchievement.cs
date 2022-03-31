@@ -60,8 +60,8 @@ namespace Achievement.Exporter.Plugin.Model
 
         public OcrAchievement(Bitmap image, string imagePath)
         {
-            this.Image = image;
-            this.ImagePath = imagePath;
+            Image = image;
+            ImagePath = imagePath;
         }
 
         public OcrAchievement Clone()
@@ -80,21 +80,21 @@ namespace Achievement.Exporter.Plugin.Model
 
         public async Task<string> OcrAsync(OcrEngine engine)
         {
-            double horizontalY = this.Image!.Height * 1.0 / 2;
+            double horizontalY = Image!.Height * 1.0 / 2;
             double margin = horizontalY / 4; // 用于边缘容错
-            double verticalX = this.Image.Width * 1.0 / 2;
-            OcrResult ocrResult = await OcrHelper.RecognizeAsync(this.ImagePath!, engine);
+            double verticalX = Image.Width * 1.0 / 2;
+            OcrResult ocrResult = await OcrHelper.RecognizeAsync(ImagePath!, engine);
 
             // 完整结果
             foreach (OcrLine? line in ocrResult.Lines)
             {
-                this.OcrText += line.Concat() + Environment.NewLine;
+                OcrText += line.Concat() + Environment.NewLine;
             }
 
             // 严格识别不到，就默认第一行
-            if (string.IsNullOrEmpty(this.OcrAchievementName) && ocrResult.Lines.Count > 0)
+            if (string.IsNullOrEmpty(OcrAchievementName) && ocrResult.Lines.Count > 0)
             {
-                this.OcrAchievementName = ocrResult.Lines[0].Concat();
+                OcrAchievementName = ocrResult.Lines[0].Concat();
             }
 
             // 先找出左侧的两个识别区域
@@ -103,12 +103,12 @@ namespace Achievement.Exporter.Plugin.Model
                 .OrderBy(line => line.Words[0].BoundingRect.Top).ToList();
             foreach (OcrLine? line in leftLines)
             {
-                this.OcrLeftText += line.Concat(); // 实际用于文本比较的内容
+                OcrLeftText += line.Concat(); // 实际用于文本比较的内容
             }
             if (leftLines.Count == 2)
             {
-                this.OcrAchievementName = leftLines[0].Concat(); // 左上
-                this.OcrAchievementDesc = leftLines[1].Concat(); // 左下
+                OcrAchievementName = leftLines[0].Concat(); // 左上
+                OcrAchievementDesc = leftLines[1].Concat(); // 左下
             }
             else
             {
@@ -123,20 +123,20 @@ namespace Achievement.Exporter.Plugin.Model
 
                 if ("达成".Equals(lineStr) || (firstRect.Top < horizontalY && firstRect.Bottom > horizontalY))
                 {
-                    this.OcrAchievementResult = lineStr; // 右中 // 98 远海牧人的宝藏 失败
+                    OcrAchievementResult = lineStr; // 右中 // 98 远海牧人的宝藏 失败
                 }
                 else if (firstRect.Top > horizontalY)
                 {
-                    this.OcrAchievementFinshDate = lineStr.Replace(" ", "").Replace("／", "/"); // 右下 去空格
+                    OcrAchievementFinshDate = lineStr.Replace(" ", "").Replace("／", "/"); // 右下 去空格
                 }
             }
 
             // 严格识别不到，就默认第一行
-            if (string.IsNullOrEmpty(this.OcrAchievementName) && ocrResult.Lines.Count > 0)
+            if (string.IsNullOrEmpty(OcrAchievementName) && ocrResult.Lines.Count > 0)
             {
-                this.OcrAchievementName = ocrResult.Lines[0].Concat();
+                OcrAchievementName = ocrResult.Lines[0].Concat();
             }
-            return this.OcrText!;
+            return OcrText!;
         }
     }
 }

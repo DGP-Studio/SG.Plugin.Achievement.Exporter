@@ -9,9 +9,9 @@ namespace Achievement.Exporter.Plugin.View
 
         public PreviewCaptureAreaDialog(ImageSource imageSource)
         {
-            this.PreviewSource = imageSource;
-            this.DataContext = this;
-            this.InitializeComponent();
+            PreviewSource = imageSource;
+            DataContext = this;
+            InitializeComponent();
         }
     }
 }

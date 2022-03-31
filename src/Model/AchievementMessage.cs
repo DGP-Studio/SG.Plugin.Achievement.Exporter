@@ -11,13 +11,13 @@
 
         public AchievementMessage(AchievementMessageLevel level, string? message)
         {
-            this.Level = level;
-            this.Message = message;
+            Level = level;
+            Message = message;
         }
 
         public override string ToString()
         {
-            return $"[{this.Level}]|{this.Message}";
+            return $"[{Level}]|{Message}";
         }
     }
 }

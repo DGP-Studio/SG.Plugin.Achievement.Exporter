@@ -45,9 +45,9 @@ namespace Achievement.Exporter.Plugin
 
             double max = 0;
             ExistAchievement maxMatch = null!;
-            foreach (ExistAchievement existAchievement in this.All![edition])
+            foreach (ExistAchievement existAchievement in All![edition])
             {
-                double n = this.Matching(achievement, existAchievement, onlyChinese);
+                double n = Matching(achievement, existAchievement, onlyChinese);
                 if (n > max)
                 {
                     max = n;
@@ -64,7 +64,7 @@ namespace Achievement.Exporter.Plugin
                     // 成就集合要再次匹配描述，并把下级成就给完成
                     if (maxMatch.levels != null && maxMatch.levels.Count > 1)
                     {
-                        this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[edition]));
+                        MatchingMutilLevels(achievement, maxMatch, List2Dic(All[edition]));
                     }
                     else
                     {
@@ -77,14 +77,14 @@ namespace Achievement.Exporter.Plugin
                 }
                 else if (maxMatch.levels != null && maxMatch.levels.Count > 1)
                 {
-                    this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[edition]), false);
+                    MatchingMutilLevels(achievement, maxMatch, List2Dic(All[edition]), false);
                 }
             }
             else
             {
                 if (achievement.OcrText.Contains("达成") && !onlyChinese)
                 {
-                    this.Matching(edition, achievement, true);
+                    Matching(edition, achievement, true);
                 }
                 Trace.WriteLine($"{achievement.OcrLeftText} 最小匹配 {maxMatch?.name + maxMatch?.desc} 匹配度 {max}");
             }
@@ -101,9 +101,9 @@ namespace Achievement.Exporter.Plugin
 
             double max = 0;
             ExistAchievement maxMatch = null!;
-            foreach (ExistAchievement existAchievement in this.All![category])
+            foreach (ExistAchievement existAchievement in All![category])
             {
-                double n = this.Matching(achievement, existAchievement, onlyChinese);
+                double n = Matching(achievement, existAchievement, onlyChinese);
 
                 if (n > max)
                 {
@@ -120,7 +120,7 @@ namespace Achievement.Exporter.Plugin
                     // 成就集合要再次匹配描述，并把下级成就给完成
                     if (maxMatch.levels?.Count > 1)
                     {
-                        this.MatchingMutilLevels(achievement, maxMatch, this.List2Dic(this.All[category]));
+                        MatchingMutilLevels(achievement, maxMatch, List2Dic(All[category]));
                     }
                     else
                     {
@@ -132,7 +132,7 @@ namespace Achievement.Exporter.Plugin
             {
                 if (achievement.OcrText.Contains("达成") && !onlyChinese)
                 {
-                    this.Matching(category, achievement, true);
+                    Matching(category, achievement, true);
                 }
                 Trace.WriteLine($"{achievement.OcrLeftText} 最小匹配 {maxMatch?.name + maxMatch?.desc} 匹配度 {max}");
             }

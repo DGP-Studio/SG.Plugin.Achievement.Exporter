@@ -14,29 +14,29 @@ namespace Achievement.Exporter.Plugin.View
 
         public AchievementExporterPage(AchievementExporterViewModel vm)
         {
-            this.DataContext = vm;
-            this.viewModel = vm;
-            this.manager = new();
-            this.InitializeComponent();
+            DataContext = vm;
+            viewModel = vm;
+            manager = new();
+            InitializeComponent();
 
             Loaded += (s, e) =>
             {
-                this.manager.Initialize();
+                manager.Initialize();
             };
 
-            this.buttonStart.Click += (s, e) =>
+            buttonStart.Click += (s, e) =>
             {
-                this.SetIsEnabled(false);
-                this.logs.Clear();
-                _ = this.manager.StartAsync();
+                SetIsEnabled(false);
+                logs.Clear();
+                _ = manager.StartAsync();
             };
 
-            this.buttonExport.Click += (s, e) =>
+            buttonExport.Click += (s, e) =>
             {
-                _ = new ExportDialog(this.manager.paimonMoeJson).ShowAsync();
+                _ = new ExportDialog(manager.paimonMoeJson).ShowAsync();
             };
 
-            this.manager.ProgressUpdated += (s, e) =>
+            manager.ProgressUpdated += (s, e) =>
             {
                 (AchievementProcessing processing, double value, double min, double max) = e;
 
@@ -44,43 +44,43 @@ namespace Achievement.Exporter.Plugin.View
 
                 if (processing == AchievementProcessing.None)
                 {
-                    this.SetIsEnabled(true);
+                    SetIsEnabled(true);
                 }
                 else
                 {
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
-                        this.viewModel.Progress = value;
-                        this.viewModel.ProgressMin = min;
-                        this.viewModel.ProgressMax = max;
+                        viewModel.Progress = value;
+                        viewModel.ProgressMin = min;
+                        viewModel.ProgressMax = max;
                     });
                 }
             };
 
-            this.manager.ExceptionCatched += (s, e) =>
+            manager.ExceptionCatched += (s, e) =>
             {
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    this.logs.AppendText(e.ToString());
-                    this.logs.AppendText(Environment.NewLine);
-                    this.logs.ScrollToEnd();
+                    logs.AppendText(e.ToString());
+                    logs.AppendText(Environment.NewLine);
+                    logs.ScrollToEnd();
                 });
             };
 
-            this.manager.MessageCatched += (s, e) =>
+            manager.MessageCatched += (s, e) =>
             {
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    this.logs.AppendText(e.ToString());
-                    this.logs.AppendText(Environment.NewLine);
-                    this.logs.ScrollToEnd();
+                    logs.AppendText(e.ToString());
+                    logs.AppendText(Environment.NewLine);
+                    logs.ScrollToEnd();
                 });
             };
         }
 
         private void SetIsEnabled(bool isEnabled)
         {
-            this.Dispatcher?.Invoke(() => this.commandBar.IsEnabled = isEnabled);
+            Dispatcher?.Invoke(() => commandBar.IsEnabled = isEnabled);
         }
     }
 }

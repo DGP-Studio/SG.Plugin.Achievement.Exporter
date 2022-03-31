@@ -19,7 +19,7 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
             public DummyWindow()
             {
-                this.CreateHandle(new CreateParams());
+                CreateHandle(new CreateParams());
             }
 
             protected override void WndProc(ref Message m)
@@ -37,7 +37,7 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
             public void Dispose()
             {
-                this.DestroyHandle();
+                DestroyHandle();
             }
         }
 
@@ -46,14 +46,14 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
         public HotkeyHook()
         {
-            this.window = new();
-            this.window.KeyPressed += (_, e) => KeyPressed?.Invoke(this, e);
+            window = new();
+            window.KeyPressed += (_, e) => KeyPressed?.Invoke(this, e);
         }
 
         public void Register(ModifierKeys modifier, Keys key)
         {
-            this.currentId += 1;
-            if (!User32.RegisterHotKey(this.window.Handle, this.currentId, (uint)modifier, (uint)key))
+            currentId += 1;
+            if (!User32.RegisterHotKey(window.Handle, currentId, (uint)modifier, (uint)key))
             {
                 if (Marshal.GetLastWin32Error() == 1409)
                 {
@@ -68,9 +68,9 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
         public void Unregister()
         {
-            for (int i = this.currentId; i > 0; i--)
+            for (int i = currentId; i > 0; i--)
             {
-                User32.UnregisterHotKey(this.window.Handle, i);
+                User32.UnregisterHotKey(window.Handle, i);
             }
         }
 
@@ -78,8 +78,8 @@ namespace Achievement.Exporter.Plugin.Core.Hotkey
 
         public void Dispose()
         {
-            this.Unregister();
-            this.window?.Dispose();
+            Unregister();
+            window?.Dispose();
         }
     }
 }

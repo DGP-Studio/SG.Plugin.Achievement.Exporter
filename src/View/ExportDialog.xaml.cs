@@ -14,29 +14,29 @@ namespace Achievement.Exporter.Plugin.View
 
         public string JsCode
         {
-            get => (string)this.GetValue(JsCodeProperty);
-            set => this.SetValue(JsCodeProperty, value);
+            get => (string)GetValue(JsCodeProperty);
+            set => SetValue(JsCodeProperty, value);
         }
         public static readonly DependencyProperty JsCodeProperty = DependencyProperty.Register("JsCode", typeof(string), typeof(ExportDialog), new PropertyMetadata(string.Empty));
 
         public ExportDialog(PaimonMoeJson paimonMoeJson)
         {
-            this.DataContext = this;
-            this.InitializeComponent();
-            this.comboBoxSelectExport.SelectionChanged += (s, e) => this.SetJsCode(paimonMoeJson);
-            this.SetJsCode(paimonMoeJson);
+            DataContext = this;
+            InitializeComponent();
+            comboBoxSelectExport.SelectionChanged += (s, e) => SetJsCode(paimonMoeJson);
+            SetJsCode(paimonMoeJson);
         }
 
         private void SetJsCode(PaimonMoeJson paimonMoeJson)
         {
-            string stext = this.comboBoxSelectExport.SelectedIndex switch
+            string stext = comboBoxSelectExport.SelectedIndex switch
             {
                 0 => Export1,
                 1 => Export2,
                 2 => Export3,
                 _ => throw new NotImplementedException(),
             };
-            this.JsCode = stext switch
+            JsCode = stext switch
             {
                 Export1 => TextHelper.GenerateCocogoatWorkJS("天地万象", paimonMoeJson),
                 Export2 => TextHelper.GeneratePaimonMoeJS("天地万象", paimonMoeJson),
@@ -50,13 +50,13 @@ namespace Achievement.Exporter.Plugin.View
             Clipboard.Clear();
             try
             {
-                Clipboard.SetText(this.JsCode);
+                Clipboard.SetText(JsCode);
             }
             catch
             {
                 try
                 {
-                    Clipboard2.SetText(this.JsCode);
+                    Clipboard2.SetText(JsCode);
                 }
                 catch { }
             }
